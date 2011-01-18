@@ -2,3 +2,19 @@ README
 ------
 This is the code module of the repository.
 
+This project was completed in 2005 and the documentation outside of our final report is a bit lacking. The two major dependencies was RTLinux and SDL. Let me know if you have any interest in trying to get this running again. This worked with Rockwell controllers and servos.
+
+
+[User Guide]
+Start computer and login
+
+./flushell
+
+start new terminal
+./StartUI
+
+load
+home 0
+home 1
+start
+
