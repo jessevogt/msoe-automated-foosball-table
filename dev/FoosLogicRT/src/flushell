@@ -1,0 +1,33 @@
+#!/bin/bash
+
+echo "Welcome to FLUShell!"
+
+input=""
+
+# main program loop
+while [ "$input" != "exit" ]
+do
+   # print prompt
+   echo -n "> "
+   read input
+
+   # store input into array
+   array=(`echo $input`)
+
+   # test the first element for the type of command 
+   case "${array[0]}" in
+      "exit")
+         echo "Exiting FLUShell..."
+         rtlinux stop FoosLogicRT.o
+         ;;
+      "load")
+         rtlinux start FoosLogicRT.o
+         ;;
+      "")
+         ;;
+      *)
+      	echo $input > /dev/rtf7
+         ;;
+   esac
+
+done
