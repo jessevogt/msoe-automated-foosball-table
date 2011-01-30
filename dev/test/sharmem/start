@@ -1,0 +1,4 @@
+rtlinux stop test
+rtlinux stop
+make clean && make
+rtlinux start test

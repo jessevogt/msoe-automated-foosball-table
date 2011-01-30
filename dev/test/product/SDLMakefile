@@ -1,0 +1,8 @@
+StartUI: main.cpp SDLWrapper.o
+	g++ main.cpp SDLWrapper.o -I/usr/include/SDL -D_REENTRANT -L/usr/lib -Wl,-rpath,/usr/lib -lSDL -lpthread
+
+SDLWrapper.o: SDLWrapper.cpp SDLWrapper.h
+	g++ -c SDLWrapper.cpp -I/usr/include/SDL -D_REENTRANT -L/usr/lib
+
+clean:
+	rm -rf *.o

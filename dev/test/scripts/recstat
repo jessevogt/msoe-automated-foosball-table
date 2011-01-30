@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# setup the config register to read from result address
+# and write to the bank select input
+outb 0x353 0x12
+
+val=$@
+
+# get address based on bank id
+case "$val" in
+	'A')
+		val="0x00" ;;
+	'B')
+		val="0x10" ;;
+	'C')
+		val="0x20" ;;
+	'D')
+		val="0x30" ;;
+	'E')
+		val="0x40" ;;
+	'F')
+		val="0x50" ;;
+	'G')
+		val="0x60" ;;
+	'H')
+		val="0x70" ;;
+	'I')
+		val="0x80" ;;
+	'J')
+		val="0x90" ;;
+	'K')
+		val="0xA0" ;;
+	'L')
+		val="0xB0" ;;
+	'M')
+		val="0xC0" ;;
+	'N')
+		val="0xD0" ;;
+	*)
+		echo "INVALID VALUE"
+		exit 1
+		;;
+esac
+
+# write address to bank select
+outb 0x352 $val
+
+while [ 1 ] 
+do
+	# read result from bank select
+	rs=`inb 0x351`
+
+	# convert to binary
+	number=`echo "$rs" | sed -e 's:^0[bBxX]::' | tr '[a-f]' '[A-F]'`
+	dec=`echo "ibase=16; $number" | bc`
+	bin=`echo "obase=2; $dec" | bc`
+
+	# print to screen
+	echo $bin
+done
