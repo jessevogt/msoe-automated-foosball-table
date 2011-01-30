@@ -1,0 +1,78 @@
+.\"
+.\" Copyright (C) 1997 Jerry Epplin.  All rights reserved.
+.\"
+.\" Permission is granted to make and distribute verbatim copies of this
+.\" manual provided the copyright notice and this permission notice are
+.\" preserved on all copies.
+.\"
+.\" Permission is granted to copy and distribute modified versions of this
+.\" manual under the conditions for verbatim copying, provided that the
+.\" entire resulting derived work is distributed under the terms of a
+.\" permission notice identical to this one
+.\" 
+.\" The author assumes no responsibility for errors or omissions, or for
+.\" damages resulting from the use of the information contained herein.
+.\" 
+.\" Formatted or processed versions of this manual, if unaccompanied by
+.\" the source, must acknowledge the copyright and authors of this work.
+.\"
+.TH RT_MQ_SEND 2 "26 July 1997" "rt_ipc" "rt_ipc"
+.SH NAME
+rt_mq_send \- message queue 'send' operation
+.SH SYNOPSIS
+.nf
+.B #define MODULE
+.B #include <linux/module.h> 
+.B #include <linux/kernel.h> 
+.B #include <linux/version.h> 
+.B #include <linux/errno.h> 
+.B #include "rt_ipc.h"
+.fi
+.sp
+.BI "int rt_mq_send(rt_mq_t *" mq ", char *" msg ", RT_MQ_PRIO " prio ", RTIME " wait ");
+.SH DESCRIPTION
+.B rt_mq_send
+enqueues the data
+.I msg
+on the message queue
+.IR mq .
+The data is assumed to be of the size with which
+.B rt_mq_init
+was called.  If
+.I prio
+is RT_MQ_NORMAL, the data is queued at the end. If
+.I prio
+is RT_MQ_URGENT, the data is forced to the front of the queue.
+An optional timeout can be specified.  If 
+.I wait
+is RT_WAIT_FOREVER, the function does not time out.  If
+.I wait
+is RT_NO_WAIT and the semaphore is not available,
+.B rt_mq_send
+returns immediately.  If
+.I wait
+is any other value, it represent a time at which the call to
+.B rt_mq_send
+should time out.  If that time is reached,
+.B rt_mq_send
+returns with -ETIME.
+.SH "RETURN VALUE"
+On success, 0 is returned.  On failure, a negative value is returned
+as described below.
+.SH ERRORS
+.IP \fB-ETIME\fP
+The timeout period expired.
+.IP \fB-EAGAIN\fP
+.I wait
+was RT_NO_WAIT, and no space was available on the queue.
+.IP \fB-EINVAL\fP
+.I mq
+does not point to a valid rt_mq_t.
+.SH "AUTHOR"
+Jerry Epplin <JerryEpplin@worldnet.att.net>
+.SH "SEE ALSO"
+.BR rt_mq_destroy (2),
+.BR rt_mq_init (2),
+.BR rt_mq_receive (2),
+.BR rt_task_ipc_delete (2), 
+.BR rt_task_ipc_init (2)

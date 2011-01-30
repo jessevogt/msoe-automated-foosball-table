@@ -1,0 +1,23 @@
+
+This is an example of creating a new rt-thread from within rt-context - it
+requires a patch to the original scheduler/rtl_sched.c (found in 
+rtl_sched.patch) basically this patch replaces the calls to 
+kmalloc(...,GFP_KERNEL) by kmalloc(...,GFP_ATOMIC) so that they
+are safe for rt-context (they can thoug fail !)
+
+Alternatively (and without patching the existing rtlinux scheduler) you could
+preallocate a stack for the new thread (or kmalloc it with the risk of failing
+in rt-context) and fill in the thread structure, that is basically what 
+pthread_create does just it allocates memory dynamically so it would fail 
+in case you call it without patching rtl_sched.c. Note that the method of 
+assigning a thread structure with prealocated memory has the advantage that 
+it will not fail (the memory is prealocated so you don't need to check) but 
+it does not allow using the common API.
+
+new_thread.c   example using pthread_create in rt-context REQUIRES the patch
+stack_ptr.c    example filling in the attr struct DOES NOT REQUIRE the patch
+
+comments/suggestions/problem reports to der.herr@hofr.at
+
+thx !
+hofrat

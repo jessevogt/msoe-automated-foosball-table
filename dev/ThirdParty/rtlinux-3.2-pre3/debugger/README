@@ -1,0 +1,222 @@
+The RTLinux Debugger
+Michael Barabanov (baraban@fsmlabs.com)
+Copyright (C) 2000, FSMLabs
+Released under the terms of the GPL
+This code is partly based on the gdbstubs package (ftp://ftp.gcom.com/pub/linux/src)
+
+This package provides debugging facilities for RTLinux threads based on GDB.
+Currently this works for x86 and PPC versions of RTLinux.
+
+	Features
+
+- source-level debugging of RTLinux programs using gdb;
+
+- simple to use: just one computer is needed (unlike with KGDB or Zentropix(TM)
+tools that require connecting two computers with a serial line);
+
+- no special tools needed; full source code is provided;
+
+- crash protection. No more frustrating reboots! (unless you try hard)
+  The debugger automatically catches all exceptions in real-time programs.
+  If any of your RT-threads fault, the debugger prints a message and suspends
+  the thread (see below for more information about this feature)
+  
+- you can invoke gdb "lazily", at any time after the fault, to find out where it
+  has happened, to examine variables, print stack traces - anything that gdb 
+  or ddd can do.
+
+- RTLinux thread support!  GDB threads commands are supported
+  in this release.  After interrupting a running program with ^C, you can use
+  "info threads", "thread", "backtrace", "up", "down" and other GDB commands
+  to examine the state of all your RTLinux threads. The DDD can also display
+  RTLinux threads.
+
+- SMP support
+
+- it is possible to use any graphical interface to gdb, e.g.
+DDD -- http://www.gnu.org/software/ddd/
+xxgdb -- there is a debian package for this very simple and lean GDB front-end
+insight -- http://sourceware.cygnus.com/insight/
+
+Alternatively, command-line GDB is always possible.
+
+--- NOTE: tracing Linux kernel code is not yet supported. Neither
+is tracing code that disables interrupts.
+
+
+	Requirements
+
+- RTLinux 2.2b or later
+
+- modutils 2.3.9 or later (you can check the version
+  with insmod -V). You can get RPMs of new modutils from
+  ftp://ftp.funet.fi/pub/Linux/mirrors/redhat/redhat/redhat-6.2/i386/RedHat/RPMS
+  and DEBs from ftp://ftp.debian.org/pub/debian/dists/woody/main/binary-i386/base.
+
+- GNU gdb 19990928 or later (gdv -v)
+
+	Using the debugger
+
+insmod rtl_debug.o
+
+Before starting debugging, a CPU exception has to occur in your RTL
+program.  You can use the breakpoint() function defined in the <rtl_debug.h>
+include file to generate one by hand.
+Division by zero will also work but is not recommended.
+
+Compile your RTLinux module with debugging support.  To enable debugging 
+support, modify CFLAGS to contain "-g", and not "-fomit-frame-pointer". The 
+simplest way to achieve that is to make sure that the CONFIG_RTL_DEBUG is 
+enabled during "make config".
+
+Install your RTLinux module, for example:
+insmod rt_process.o
+
+You should see a message of the following form:
+rtl_debug: exception 3 in rt_process, thread id 0xc2aa2400; (re)start GDB to debug
+
+Then, type gdb rt_process.o or ddd rt_process.o
+
+Note: the file name you specify on the command line should correspond
+to the module that generated an exception.
+
+Finally, at the GDB prompt, type 
+target remote /dev/rtf10
+(if you load the gdb macros described below, just type "dbg").
+The debugger should stop at the source line that generated the exception.
+You can then use gdb commands to perform debugging as usual.
+
+
+	Example session (see hello.c in the debugger directory)
+
+Tip: if you're in X, use dmesg or xconsole to watch the output from hello.o.
+
+# insmod rtl_debug.o
+RTLinux Debugger Loaded (http://www.fsmlabs.com/)                                 
+
+# insmod hello.o
+rtl_debug: exception 3 in hello, thread id 0xc2aa2400; (re)start GDB to debug
+
+# gdb hello.o
+
+GNU gdb 19990928
+Copyright 1998 Free Software Foundation, Inc.
+GDB is free software, covered by the GNU General Public License, and you are
+welcome to change it and/or distribute copies of it under certain conditions.
+Type "show copying" to see the conditions.
+There is absolutely no warranty for GDB.  Type "show warranty" for details.
+This GDB was configured as "i686-pc-linux-gnu"...
+(gdb) target remote /dev/rtf10
+Remote debugging using /dev/rtf10
+[New Pid -977672704]
+[Switching to Pid -977672704]
+start_routine (arg=0x0) at hello.c:29
+29              for (i = 0; i < 20; i ++) {
+(gdb) list
+24
+25              pthread_make_periodic_np (pthread_self(), gethrtime(), 500000000);
+26
+27              breakpoint();
+28
+29              for (i = 0; i < 20; i ++) {
+30                      pthread_wait_np ();
+31                      rtl_printf("I'm here; my arg is %x\n", (unsigned) arg);
+32              }
+33              return 0;
+(gdb) bre 31
+Breakpoint 1 at 0xc807f0c5: file hello.c, line 31.
+(gdb) cont
+Continuing.
+
+Breakpoint 1, start_routine (arg=0x0) at hello.c:31
+31                      rtl_printf("I'm here; my arg is %x\n", (unsigned) arg);
+(gdb) cont
+Continuing.
+
+Breakpoint 1, start_routine (arg=0x0) at hello.c:31
+31                      rtl_printf("I'm here; my arg is %x\n", (unsigned) arg);
+(gdb) print arg
+$1 = (void *) 0x0
+(gdb) del
+Delete all breakpoints? (y or n) y
+(gdb) quit
+The program is running.  Exit anyway? (y or n) y
+# rmmod hello
+# rmmod rtl_debug
+
+
+	Notes and tips
+
+- the .gdbinit file in this directory contains some gdb macros to save you
+  typing. You can place this file in your home directory or in the current
+  directory for gdb to automatically load it.
+
+The macros are:
+
+dbg
+	start debugging via /dev/rtf10
+
+modaddsym module-file-name.o
+	add symbols from the (currently loaded) module to GDB's symbol table
+
+modaddsched
+	attempt to add symbols for the scheduler.
+	The scheduler symbols are useful for determining where each
+	thread is blocked. The rtl.mk file should be present in
+	the current directory.
+
+di
+	disassemble a piece of code around PC
+
+
+- a very useful mode of operation is to simply have the rtl_debug.o module
+loaded to prevent system crashes.
+If a RT-task performs an illegal operation, the debugger module
+will print a message detailing the module, thread id and the current value
+of the instruction pointer.
+NOTE. To facilitate debugging, all RT-threads stop when there is an 
+exception in any thread.
+
+To get more detailed information of the system state, you should
+invoke gdb module_name.o, and type "target remote /dev/rtf10" at the prompt.
+You will see where the problem is. You can also examine other threads'
+state.
+
+NOTE. To safely remove the offening module, Ctrl-Z the debugger,
+rmmod module_name.o, and kill the gdb. Do not type "continue" or "next"
+at the prompt as this will cause the system to try to execute the bad
+code again.
+
+- to examine internal thread's state (see include/rtl_sched.h,
+struct rtl_thread_struct), put the following lines at the beginning
+of the thread code:
+
+	pthread_t self = pthread_self();
+
+After that, you can examine *self, self->period, etc. For example:
+"print *self".
+
+- after you used "continue" to resume your tasks, you can press ^C to
+regain control of the debugger. Then you can set a breakpoint in the
+real-time code that may be hit after you type "continue".
+"info threads", "thread", "backtrace", "up", "down" GDB commands 
+are useful in this regard.
+
+- if you want to leave your RT-tasks in the running state,
+delete all breakpoints ("delete"), and use "quit" as the last
+command to GDB;
+
+- you can change the FIFOs used for communicating with the debugger
+  by specifying fifo=NN on the insmod rtl_debug.o command line. The
+  debugger uses three FIFOs (fifo, fifo+1, fifo+2). The default is NN==10.
+
+- you can specify bp=1 as an insmod parameter to rtl_debug.o. This
+will cause a breakpoint exception in the debugger. Note however
+that (due to a bug in GDB's symbol handling) you should always
+start GDB with a filename that correspond to the module that
+generated the exception.
+
+- global variables not initialized explicitly (bss) can not be examined 
+in gdb.  This is a bug in GDB. Hopefully it will be fixed in a later
+version. For now, you need to explicitely initialize all global variables.
+

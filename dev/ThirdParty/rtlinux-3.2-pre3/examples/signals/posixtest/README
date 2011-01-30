@@ -1,0 +1,18 @@
+
+POSIX Test Suite
+----------------
+
+The POSIX Test Suite is an open source test suite with the goal of
+performing conformance, functional, and stress testing of the IEEE
+1003.1-2001 System Interfaces specification in a manner that is
+agnostic to any given implementation.
+
+While active development and testing is currently happening on Linux,
+our choice of portable tools should make this test suite usable on any
+POSIX operating system.
+
+All code is distributed under the GNU General Public License v2.  A
+copy of this license is contained in the COPYING file.
+
+
+Tests addapted to run on RTLinux - Dec, 2002 Josep Vidal <jvidal@disca.upv.es> (OCERA)

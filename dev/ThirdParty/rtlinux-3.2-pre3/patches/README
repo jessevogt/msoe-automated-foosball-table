@@ -1,0 +1,8 @@
+
+Patches for 2.4.19 2.4.20 and 2.4.21 in here are 
+(C) FSMLabs License: GPL V2 and FSMLabs' Open RTLinux License.
+Author Der Herr Hofrat <der.herr@hofr.at>
+
+Please don't forget to apply them to a clean kernel directly from
+www.kernel.org. If you apply these to a RedHat-kernel, you'll be
+in difficulties!

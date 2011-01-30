@@ -1,0 +1,12 @@
+
+all that should be required to compile comedi for rtlinux in this
+directory is:
+
+./configure --linuxdir /usr/src/linux --rtldir /usr/src/rtlInux-3.2-pre3 --menu
+make
+
+if you find any problems with building comedi in this directory drop me a note
+at <der.herr@hofr.at> if you have any problems with comedi it self, see the
+mailing list at www.comedi.org .
+
+hofrat

@@ -1,0 +1,19 @@
+
+The concept shown here is what psc does to get a system call without needing
+to patch the kernel source for psc - so this is simply all stolen from 
+psc/psc.c .
+
+This shows how to allocate a system call without requireing a patch to the 
+kernel - and this should be more or less arch independant - what this does
+is go down the syscall table from the top searching for a unused syscall 
+number and then assigns the new syscall to that number - thats simply. The
+problem is that the user-space app does not know that number and it would
+not be too practical if we would need to recompile our apps all the time - so
+we use a /proc file to pass the system call number we get to user-space apps
+That is what syscall_check then does.
+
+alloc_syscall.o: kernel module to allocate a free system call number int
+                 the kernels system call table.
+
+syscall_check: user-space application that grabs the syscall number from /proc
+               and then invokes this system call.

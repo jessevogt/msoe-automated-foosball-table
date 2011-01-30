@@ -1,0 +1,3 @@
+rtlinux start
+insmod /usr/src/rtlinux/rtlinux-3.1/debugger/rtl_debug.o
+lsmod

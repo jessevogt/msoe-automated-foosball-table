@@ -1,0 +1,9 @@
+This example demonstrates the use of semaphores and message queues.
+Its output is to the console, so running it in a normal xterm
+wouldn't be very interesting.  To use:
+
+# 1.  make rtl		installs the rtlinux modules
+# 2.  make rt_ipc		installs rt_ipc
+2.  make		compiles the example
+3.  make ins		installs (and runs) the example.  Output is to console.
+4.  make rm		removes the example

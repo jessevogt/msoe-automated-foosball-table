@@ -1,0 +1,91 @@
+.\"
+.\" Copyright (C) 1997 Jerry Epplin.  All rights reserved.
+.\"
+.\" Permission is granted to make and distribute verbatim copies of this
+.\" manual provided the copyright notice and this permission notice are
+.\" preserved on all copies.
+.\"
+.\" Permission is granted to copy and distribute modified versions of this
+.\" manual under the conditions for verbatim copying, provided that the
+.\" entire resulting derived work is distributed under the terms of a
+.\" permission notice identical to this one
+.\" 
+.\" The author assumes no responsibility for errors or omissions, or for
+.\" damages resulting from the use of the information contained herein.
+.\" 
+.\" Formatted or processed versions of this manual, if unaccompanied by
+.\" the source, must acknowledge the copyright and authors of this work.
+.\"
+.TH RT_TASK_IPC_INIT 2 "26 July 1997" "rt_ipc" "rt_ipc"
+.SH NAME
+rt_task_ipc_init \- create a real-time task for use with rt_ipc
+.SH SYNOPSIS
+.nf
+.B #define MODULE
+.B #include <linux/module.h> 
+.B #include <linux/kernel.h> 
+.B #include <linux/version.h> 
+.B #include <linux/errno.h> 
+.B #include "rt_ipc.h"
+.fi
+.sp
+.BI "int rt_task_ipc_init(RT_TASK_IPC * " task ", void (*" fn ")(int " data "), int " data ", int " stack_size ", int " priority ");
+.SH DESCRIPTION
+.B rt_task_ipc_init
+creates a real-time task.  To make use of the IPC facilities of rt_ipc, you
+should use
+.B rt_task_ipc_init
+instead of the standard
+.B rt_task_init
+provided by Real Time Linux.
+.I task
+is a structure the space for which must be provided by the application.
+.I task
+must be present during the lifetime of the real-time task; thus it cannot
+be an automatic variable.  This corresponds to the RT_TASK structure which
+is passed to 
+.BR rt_task_init .
+.I fn
+is the entry point of the new task.  The parent task can send a one-integer
+value
+.I data
+to the new task.
+.I stack_size
+is the size of the stack to be used by the new task, and 
+.I priority
+is the priority to be given the task.  The highest priority is 1, while
+the lowest is RT_LOWEST_PRIORITY.
+.PP
+The newly created real-time task is initially dormant.  It is normally
+made active by a call to 
+.BR rt_task_make_periodic .
+.SH "RETURN VALUE"
+On success, 0 is returned.  On failure, a negative value is returned
+as described below.
+.SH ERRORS
+.IP \fB-EINVAL\fP
+.I task
+is already in use by another task.
+.IP \fB-ENOMEM\fP
+space could not be allocated for the real-time task.
+.SH "BUGS"
+The RT_TASK_IPC type passed to
+.B rt_task_ipc_init
+is not compatible with the RT_TASK type passed to
+.BR rt_task_init .
+Use the macro MAKE_RT_TASK() to convert an RT_TASK_IPC to an RT_TASK when
+calling a standard Real-Time Linux function.
+.SH "AUTHOR"
+Jerry Epplin <JerryEpplin@worldnet.att.net>
+.SH "SEE ALSO"
+.BR rt_mq_destroy (2),
+.BR rt_mq_init (2),
+.BR rt_mq_receive (2),
+.BR rt_mq_send (2),
+.BR rt_task_init (2),
+.BR rt_task_ipc_delete (2), 
+.BR rt_sem_destroy (2), 
+.BR rt_sem_init (2), 
+.BR rt_sem_post (2), 
+.BR rt_sem_trywait (2), 
+.BR rt_sem_wait (2)

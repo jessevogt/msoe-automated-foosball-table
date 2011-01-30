@@ -1,0 +1,146 @@
+- This version provides a subset of POSIX interface. Several example
+programs demonstrate the new interface. Old programs will still run,
+however you are encouraged to migrate your programs to POSIX.
+
+
+	POSIX interface functions available in this release:
+
+clock_gettime
+clock_settime
+clock_getres
+time
+usleep
+nanosleep
+
+sched_get_priority_max
+sched_get_priority_min
+
+pthread_self
+
+pthread_attr_init
+pthread_attr_getstacksize
+pthread_attr_setstacksize
+pthread_attr_setschedparam
+pthread_attr_getschedparam
+pthread_attr_setdetachstate
+pthread_attr_getdetachstate
+pthread_yield
+
+pthread_setschedparam
+pthread_getschedparam
+pthread_attr_setschedparam
+pthread_attr_getschedparam
+pthread_create
+
+pthread_exit
+pthread_cancel
+pthread_setcanceltype
+pthread_setcancelstate
+pthread_join
+pthread_kill (signals supported: 0, RTL_SIGNAL_SUSPEND, RTL_SIGNAL_WAKEUP,
+RTL_SIGNAL_CANCEL)
+
+pthread_mutexattr_getpshared(3),
+pthread_mutexattr_setpshared(3),
+pthread_mutexattr_init(3),
+pthread_mutexattr_destroy(3),
+pthread_mutexattr_settype(3),
+pthread_mutexattr_gettype(3),
+pthread_mutex_init(3),
+pthread_mutex_destroy(3),
+pthread_mutex_lock(3),
+pthread_mutex_trylock(3),
+pthread_mutex_unlock(3)
+
+The following group of functions is supported if
+_POSIX_THREAD_PRIO_PROTECT options is defined:
+pthread_mutexattr_setprotocol(3)
+pthread_mutexattr_getprotocol(3)
+pthread_mutexattr_setprioceiling(3)
+pthread_mutexattr_getprioceiling(3)
+pthread_mutex_setprioceiling(3)
+pthread_mutex_getprioceiling(3)
+
+
+POSIX condition variables:
+
+pthread_condattr_getpshared(3),
+pthread_condattr_setpshared(3),
+pthread_condattr_init(3),
+pthread_condattr_destroy(3),
+pthread_cond_init(3),
+pthread_cond_destroy(3),
+pthread_cond_wait(3),
+pthread_cond_timedwait(3),
+pthread_cond_broadcast(3),
+pthread_cond_signal(3),
+
+sem_init(3),
+sem_destroy(3),
+sem_getvalue(3),
+sem_wait(3),
+sem_trywait(3),
+sem_post(3),
+sem_timedwait(3)
+
+pthread_spin_init(3),
+pthread_spin_destroy(3),
+pthread_spin_lock(3),
+pthread_spin_trylock(3),
+pthread_spin_unlock(3),
+
+sysconf(3),
+uname(2)
+
+Many of these functions are described, for example, in the Single UNIX
+Specification, Version 2
+(http://www.opengroup.org/onlinepubs/7908799/index.html).
+
+Most Linux distributions contain man pages for these functions as
+implemented by the LinuxThreads library.  You can try man 3
+pthread_create, for example.
+
+POSIX options supported (incomplete list):
+_POSIX_TIMEOUTS
+_POSIX_SPIN_LOCKS
+_POSIX_SEMAPHORES
+
+
+	Non-portable POSIX extensions:
+
+Manual pages for these functions can be found in the rtl/man directory.
+The include/rtl_sched.h file contains declarations of these and other related
+functions and types.
+
+pthread_attr_setcpu_np -- assign the created thread to a particular CPU
+
+pthread_attr_getcpu_np
+
+pthread_wait_np -- suspend the execution of the calling thread until the next period
+	(for periodic tasks). pthread_wait_np is a cancellation point.
+
+pthread_delete_np -- delete the thread.
+
+pthread_attr_setfp_np -- mark the created thread as using or not using the FPU
+
+pthread_setfp_np -- mark the thread as using or not using the FPU
+
+pthread_make_periodic_np (pthread_t p, hrtime_t start, hrtime_t period)
+	set timing parameters for periodic threads
+
+pthread_suspend_np() -- suspend the execution of the calling thread.
+	pthread_suspend_np(pthread_self()) is a cancellation point.
+
+pthread_wakeup_np (pthread_t thread) -- wake up the thread
+
+
+A possible use of these functions is demonstrated in the example programs.
+There are manual pages for these and other functions in the rtl/man directory.
+
+	Notes:
+
+pthread_create must only be called from Linux (i.e., not from
+RT-threads).
+
+TODO
+sigemptyset, sigfillset, sigaddset, sigdelset, sigismember (3)

@@ -1,0 +1,28 @@
+ARES_FREE_ERRMEM(3)                                        ARES_FREE_ERRMEM(3)
+
+
+
+NAME
+       ares_free_errmem - Free memory allocated by ares_strerror
+
+SYNOPSIS
+       #include <ares.h>
+
+       void ares_free_errmem(char *errmem)
+
+DESCRIPTION
+       The  ares_free_errmem  function  frees any memory which might have been
+       allocated by  the  ares_strerror(3)  function.   The  parameter  errmem
+       should  be set to the variable pointed to by the memptr argument previ-
+       ously passed to ares_strerror.
+
+SEE ALSO
+       ares_strerror(3)
+
+AUTHOR
+       Greg Hudson, MIT Information Systems
+       Copyright 1998 by the Massachusetts Institute of Technology.
+
+
+
+                                 23 July 1998              ARES_FREE_ERRMEM(3)

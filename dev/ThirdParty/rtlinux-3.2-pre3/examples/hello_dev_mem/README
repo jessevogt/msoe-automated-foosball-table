@@ -1,0 +1,14 @@
+
+Here you find an example of communicating between RTLinux rt-threads and user
+space applications using /dev/mem. 
+
+hello.o		rtlinux kernel module that rtl_printfs the value stored in 
+		shared memory - see hello_func.c for the thread code, run 
+		dmesg to view output.
+
+read_dev_mem 	user-space app reading the value from the same shared memory 
+		location
+
+write_dev_mem 	write integers to /dev/mem, on exit the string quit is entered
+		which is converted to 0 by atoi so after you type in quite 
+		shared memory is set to 0.

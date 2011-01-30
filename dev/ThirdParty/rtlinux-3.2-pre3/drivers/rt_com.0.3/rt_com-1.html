@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.7">
+ <TITLE>rt_com: Device Driver Support</TITLE>
+
+ <LINK HREF="rt_com.html#toc1" REL=contents>
+</HEAD>
+<BODY>
+Next
+Previous
+<A HREF="rt_com.html#toc1">Contents</A>
+<HR>
+<H2><A NAME="s1">1. Device Driver Support</A> </H2>
+
+<P>$Id: rt_com-1.html,v 1.1.1.1 2003/04/28 06:15:45 hofrat Exp $
+<H2><A NAME="ss1.1">1.1 rt_com - serial port driver</A>
+ </H2>
+
+<P>author: Jochen K&uuml;pper &lt;jochen@uni-duesseldorf.de&gt;
+<P>last changed: $Date: 2003/04/28 06:15:45 $
+<P>This manual is intended to describe <CODE>rt_com</CODE> version 0.3, but is not fully updated
+to match that version yet. The interface should be right, though.
+<H3>Introduction </H3>
+
+<P>This chapter of the manual describes the <CODE>rt_com</CODE> kernel module. That module provides
+a reasonable easy software interface (driver) to the standard serial ports of the
+PCs. There are a small number of user functions that provide an interface to the
+port, as well as several functions internally used to communicate with the hardware.
+<P>
+<H3>Installation </H3>
+
+<P>The rt_com package should contain the source code (<CODE>rt_com.h</CODE>, <CODE>rt_com.c</CODE>, <CODE>rt_comP.h</CODE>),
+makefiles (<CODE>Makefile.am</CODE>, <CODE>Makefile.standalone</CODE>), some informational files (<CODE>COPYING</CODE>,
+<CODE>License</CODE>, <CODE>README</CODE>) and this documentation in various formats. The master file is <CODE>rt_com.lyx</CODE>,
+there are also html and Postscript versions of it available.
+<P>The module works with RT-Linux v1 and v2. In order to run it on an v1 system
+(Linux kernel 2.0.x) you need to define <CODE>RTLINUX_V1</CODE> at compile time.
+<H3>Interface functions </H3>
+
+<H3>Setting up a serial port </H3>
+
+<P>This is to set up the port for use by your module by providing some initialization
+data. The function is declared as
+<P>
+<HR>
+<PRE>
+void rt_com_setup( unsigned int com, unsigned baud, unsigned parity, unsigned stopbits, unsigned wordlength)
+ 
+</PRE>
+<HR>
+<P>where com is the entry number from the<CODE> rt_com_table</CODE> (see paragraph 
+<A HREF="#rt_com_table">rt_com_table</A> ), baud
+is the Baud rate the port shall be operated at, parity determines the parity policy
+to use (possible values are <CODE>RT_COM_PARITY_EVEN</CODE>, <CODE>RT_COM_PARITY_NONE</CODE>, <CODE>RT_COM_PARITY_ODD</CODE>
+- these are defined in <CODE>rt_com.h</CODE>), stopbits and wordlength are self explanatory and
+take the immediate value these flags shall be set at.
+<H3>Writing data to a port  </H3>
+
+<P>To write data to a port you need to call the function<CODE> rt_com_write</CODE>, which is
+declared as
+<P>
+<HR>
+<PRE>
+void rt_com_write( unsigned int com, char *buf, int cnt )
+ 
+</PRE>
+<HR>
+<P>where com is the entry number from the <CODE>rt_com_table</CODE> (see paragraph 
+<A HREF="#rt_com_table">rt_com_table</A> ), buf is
+the memory address of the data to write to the port, cnt is the number of bytes
+that shall be written.
+<H3>Reading data from a port </H3>
+
+<P>To read data from a port you need to call the function rt_com_read, which is
+declared as
+<P>
+<HR>
+<PRE>
+int rt_com_read( unsigned int com, char *buf, int cnt )
+ 
+</PRE>
+<HR>
+<P>where com is the entry number from the<CODE> rt_com_table</CODE> (see paragraph 
+<A HREF="#rt_com_table">rt_com_table</A> ), buf is
+the memory address the data read shall be put in, cnt is the maximum number of bytes
+that shall be read. The function returns the number of bytes that really have been
+read.
+<H3>Internals </H3>
+
+<H3><A NAME="init_module"></A> Loading the module into memory </H3>
+
+<P>When the module gets loaded it requests the port memory and registers the interrupt
+service routine (ISR) for each member of the rt_com_table (see paragraph 
+<A HREF="#rt_com_table">rt_com_table</A>). Moreover
+it initializes all ports.
+<P>On success it reports the loading of the module, otherwise it releases all resources,
+reports the failure and exits without the module beeing loaded. 
+<H3>Removing the module </H3>
+
+<P>Before the module is removed from memory, the function cleanup_module frees
+all allocated resources.
+<H3>Data Structures </H3>
+
+<H3><A NAME="rt_buf_struct"></A> rt_buf_struct </H3>
+
+<P>Structure to implement software FIFOs. Used for buffering of the data that needs
+to be written to the port and data read from hardware that needs to be read by the
+user. The FIFO size is given by the define <CODE>RT_COM_BUF_SIZ</CODE>; it has to be a power
+of two.
+<H3>rt_com_struct </H3>
+
+<P>Defines the hardware parameter of one serial port. The members of this structure
+are a magic number (not used yet), the base rate of the port (115200 for standard
+ports), the port number, the interrupt number (IRQ) of the port, the flags set for
+this port, the ISR (see paragraph 
+<A HREF="#init_module">init_module</A>) the type and a copy of the IER register. Moreover
+it contains two FIFOs as defined by the <CODE>rt_buf_struc</CODE> (see paragraph 
+<A HREF="#rt_buf_struct">rt_buf_struct</A>), one for reading
+from the port and one for writing to it, respectively.
+<H3><A NAME="rt_com_table"></A> rt_com_table </H3>
+
+<P>This array holds a rt_com_struct for each serial port to be handled by the module.
+<H3>Availability </H3>
+
+<P>The package is available at the 
+<A HREF="http://www-public.rz.uni-duesseldorf.de/~jochen/computer/software/rt_com/">rt_com homepage</A> and the 
+<A HREF="http://www.rtlinux.org">RT-Linux homepage</A>.
+<H3>Bugs </H3>
+
+<P>Please report bugs to 
+<A HREF="mailto:jochen@uni-duesseldorf.de">Jochen K&uuml;pper</A> and the 
+<A HREF="mailto:rtl@rtlinux.cs.nmt.edu">RT-Linux maiing list</A>.
+<P>There are no known bugs right now. 
+<H3>Acknowledgment </H3>
+
+<P>Thanks to Jens Michaelsen for providing his code.
+<HR>
+Next
+Previous
+<A HREF="rt_com.html#toc1">Contents</A>
+</BODY>
+</HTML>

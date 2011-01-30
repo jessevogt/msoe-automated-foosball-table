@@ -1,0 +1,59 @@
+******************************************************************
+ 
+ * Copyright (c) 2002, Intel Corporation. All rights reserved.
+ * Created by:  julie.n.fleischer REMOVE-THIS AT intel DOT com
+ * This file is licensed under the GPL license.  For the full content
+ * of this license, see the COPYING file at the top level of this
+ * source tree.                                                                                   
+
+        Addapted by J. Vidal <jvidal@disca.upv.es> to RTLinux 10-12-02.
+ 
+******************************************************************
+
+TEST: 1-1.c
+ * Test that timer_delete() deletes a timer.
+ * Steps:
+ * - Create a timer to send SIGTOTEST on expiration and set up a signal
+ *   handler to catch it.
+ * - Activate the timer.
+ * - Delete the timer before the timer had a chance to expire.  [Potential
+ *   false failure here if the timer cannot be deleted in time.  However,
+ *   the timer expiration will be set large enough that this should not
+ *   be likely.]
+ * - Sleep until the timer would have expired.
+ * - If no signal was caught, PASS.  Otherwise, FAIL.
+ *
+ * For this test, signal SIGTOTEST will be used, clock CLOCK_REALTIME
+ * will be used.
+
+******************************************************************
+
+TEST: 1-2.c
+ * Test that after a timer is deleted by calling timer_delete(), it
+ * cannot be armed by calling timer_settime().
+ * Steps:
+ * - Create a timer 
+ * - Delete that timer
+ * - Try to call timer_settime() on that timer and ensure it fails
+ *   with errno==EINVAL.
+ *
+ * For this test, signal SIGTOTEST will be used, clock CLOCK_REALTIME
+ * will be used.
+
+******************************************************************
+
+TEST: 5-1.c
+ * Test that timer_delete() returns -1 and sets errno==EINVAL if
+ * timerid is not a valid timer ID.
+
+******************************************************************
+
+TEST: 5-2.c
+ * Test that timer_delete() returns -1 and sets errno==EINVAL when
+ * trying to delete a timer that has already been deleted.
+ * Steps:
+ * - Run test case 1-1.c and then try to delete the timer again.
+ *
+ * For this test, signal SIGTOTEST will be used, clock CLOCK_REALTIME
+ * will be used.
+

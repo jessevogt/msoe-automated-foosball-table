@@ -1,0 +1,26 @@
+ARES_FREE_STRING(3)                                        ARES_FREE_STRING(3)
+
+
+
+NAME
+       ares_free_string - Free strings allocated by ares functions
+
+SYNOPSIS
+       #include <ares.h>
+
+       void ares_free_string(char *str)
+
+DESCRIPTION
+       The   ares_free_string   function  frees  a  string  allocated  by  the
+       ares_mkquery function.
+
+SEE ALSO
+       ares_mkquery(3)
+
+AUTHOR
+       Greg Hudson, MIT Information Systems
+       Copyright 2000 by the Massachusetts Institute of Technology.
+
+
+
+                                4 January 2000             ARES_FREE_STRING(3)

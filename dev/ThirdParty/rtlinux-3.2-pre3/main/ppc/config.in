@@ -1,0 +1,3 @@
+define_bool CONFIG_PSC y
+bool 'Floating Point Support' CONFIG_RTL_FP_SUPPORT
+bool 'RTLinux Debugger' CONFIG_RTL_DEBUGGER

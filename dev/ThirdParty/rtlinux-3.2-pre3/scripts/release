@@ -1,0 +1,2 @@
+#!/bin/bash
+fgrep Release scripts/rtlinux.spec | awk '{print $2}'

@@ -1,0 +1,11 @@
+
+PSC was a second attempt at user space real-time and FSMLabs is no longer
+actively supporting it. The current RTLinux
+support for protected memory is the PSDD (Protected Space Development Domain)
+and it is available only in RTLinux/Pro because we found that it requires
+an enormous engineering effort. PSC works, however. Try it out. Improve it.
+
+Victor Yodaiken
+Socorro NM September 2002.
+
+

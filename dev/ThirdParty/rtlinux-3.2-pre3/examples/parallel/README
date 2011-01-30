@@ -1,0 +1,55 @@
+examples/parallel:
+Files in this directory are for playing with the parallel port and rtlinux , 
+to use them all you will need a standard PLIP-cable . For details on that 
+cable pleas check PLIP.txt.
+
+note: the values of LPT is not defined via common.h for read_lpt.c and 
+lpt_irq.c since I assume that you are running these two executable on the
+second realtime or non-realtime box. so you might have to recompile on 
+that second box manually if the instalation (especially the libs) are not
+the same. to manually compile read_lpt.c and lpt_irq.c use:
+
+  cc -Wall -O2 lpt_irq.c -o lpt_irq 
+  cc -Wall -O2 read_lpt.c -o real_lpt
+
+ note: to compile these progs for MiniRTL you must take the lib restrictions
+ into account , that is if you installed the glibc-2.0.7 package ,then you 
+ need to issue the compile command as:
+
+  cc -Wall -nostdlib -L /usr/lib/glibc207/ -lc -O2 lpt_irq.c -o lpt_irq 
+  cc -Wall -nostdlib -L /usr/lib/glibc207/ -lc -O2 read_lpt.c -o real_lpt
+
+files:
+
+rt_irq_gen.c : wait for an input on the parallel port . So this is
+               poling in a busy-wait loop until somthing occured at
+               the parallel-port. It will "freez" your rtlinux box
+               until something comes in or it is timed out. if you
+               remove the timeout in rt_irq_gen.c then your rtlinux box
+               will only stay "alive" aslong as you run the lpt_irq 
+               programm on your second linux box conecting it via a 
+               plip-cable to your rtlinux box.
+
+sched_toggle.c : This toggles the pins D0-D7 of parallel-port. with an 
+                 oszilloscope you can directly measure the scheduling 
+		 jitter of RTLinux ! With the program read_lpt running on 
+                 a second linux (rt or non-rt), you can watch the pins toggle
+                 (but you will get no timings...)
+                 
+
+rectangle.c: The name says it. this is two threads , each sets D0-D7 high the 
+ 	     then low. as the two threads are running with different periods
+             one gets a phase-change at every period of the slow thread so the
+             output is only a pure rectangle if the second thread is disabled.
+
+read_lpt.c: This is a small programm that will simply read the status pins of 
+	    the parallel-port in a loop. you can use this instead of an 
+	    osziloscope just to see what is going on , to do so start this 
+	    program on a second Linux pc and connect the rtlinux box via
+	    standard PLIP-cable (they are not expensive its not worth making
+	    your own, if you connect wrong pins you can damage your paralell
+	    port...)
+
+lpt_irq.c: This pools for ACK to go low on LPT and then toggles pins D0-D7 to
+	   produce an ACK . again this runs on the second linux box and is 
+	   connected to the rtlinux box via PLIP-cable .	

@@ -1,0 +1,8 @@
+
+Read a file into kernel space - this example only reads in the first 4K
+this may be usefull to store configurations for rt-tasks in regular files
+and let the rt-thread read them directly from kernel space via some non-rt
+handler to access the file (don't try this from within an rt-thread...)
+
+kmore.o: kernel module that read a src file passed on the commandline as module
+         parameter and then dumps it via printk - totaly useless ;) 

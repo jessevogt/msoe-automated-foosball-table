@@ -1,0 +1,7 @@
+if [ "$CONFIG_SMP" != "y" ]; then
+ 	bool 'Userspace Real-Time' CONFIG_PSC
+fi
+bool 'Floating Point Support' CONFIG_RTL_FP_SUPPORT
+bool 'RTLinux V1 API support' CONFIG_RTL_USE_V1_API
+bool 'RTLinux Debugger' CONFIG_RTL_DEBUGGER
+bool 'Synchronized clock support' CONFIG_RTL_CLOCK_GPOS

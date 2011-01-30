@@ -1,0 +1,4 @@
+To make hyperlinks in the html/man/ directory work properly,
+you need to download the Single Unix Specification tarball at
+http://www.opengroup.org/onlinepubs/7908799/download/susv2.tgz
+and unpack it in this directory.

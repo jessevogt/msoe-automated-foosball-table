@@ -1,0 +1,100 @@
+INTRODUCTION
+
+The mbuff.o module and /dev/mbuff is intended to be used as a 
+shared memory device making memory allocated in the kernel using
+vmalloc possible to map in the user space. Such memory does not need
+to be reserved at the system startup and its size is not limited by memory
+fragmentation. The allocated memory is logically (but not physically) 
+countinuous. It can not be swapped out, so is well suited for real time
+applications, especially communication between real time tasks and user space
+or other high bandwidth kernel-user data exchange.
+
+INSTALLATION
+
+Make sure you have in /usr/src/linux the configured sources of currently
+running kernel.
+The support for the "misc device driver" should be ON in the kernel config.
+The module is tested with 2.0.36-38, 2.2.12-15 and 2.3.99pre3 SMP and single
+processor kernels.
+
+To test:
+make test
+lsmod
+dmesg
+lsmod (repeat until you see usage count returning to 0).
+rmmod mbuff
+
+Remove -DSHM_DEMO from CFLAGS in Makefile.
+cp -a ./mbuff /dev/mbuff
+Set the uid,gid and permissions of /dev/mbuff according to your security policy.
+make clean; make
+cp mbuff.o /lib/modules/`uname -r`/misc
+depmod -a
+modprobe mbuff
+
+BASIC USAGE
+
+The simplest example is the file demo.c distributed with the package. 
+The 
+void * mbuff_alloc(const char *name, int size)
+function allocates new area and maps it, or just maps already existing area.
+The function returns the pointer to the mapped area or NULL in the case
+of failure (no /dev/mbuff, bad permisions, mbuff.o not loaded,
+not enough memory, or size greater than the size of already allocated area).
+The first call does real allocation (swapping out some programs if neccesary),
+the next calls should use the "size" argument equal or less than the one
+used at the first allocation.
+
+mbuff_alloc should be called by each process accessing the memory, as well
+as in kernel module. 
+
+Every process calling mbuff_alloc is responsible for freeing it before exit.
+It can be done with 
+void mbuff_free(const char *name, void * mbuf)
+function. It will unmap the memory and decrease usage counter, so when the last
+process unmaps the memory, it will be freed. "mbuf" should be the pointer
+returned initially by mbuff_alloc.
+
+For people who often forget to deallocate the memory, there is
+void * mbuff_attach(const char *name, int size)
+function - it works like mbuff_alloc, exept it does not increase usage counter
+- memory can be deallocated automatically on munmap (e.g. process gets killed).
+To unmap it earlier use
+void mbuff_detach(const char *name, void * mbuf)
+function. All it does is just munmap call.
+It makes sense to use mbuff_attach and mbuff_detach only in user space.
+
+I would advice to declare "volatile" all pointers operating on the shared 
+area - this prevents compiler from guessing the contents.
+
+WARNING: mbuff_allocate calls vmalloc, may need to swap out some memory
+   - do not call it from real time nor interrupt nor timer context.
+   This code may call schedule() !
+   It should be safe to call it from RT-FIFO handler. And of course it may
+   be called in init_module().
+
+HOW IT WORKS
+
+Well, for details I have to say "read the sources". If you are really
+interested, compile with debugging and run "make test".
+
+Important thing to note are return codes from ioctl functions. They return
+the size of the area (if it exists at the time of return), or a negative
+error code. IOCTL_MBUFF_DEALLOCATE returns size of the area if it still
+exists, 0 if it has been just definitively deallocated or negative -EINVAL
+if there is no such named area. You do not need to worry if on the last
+DEALLOCATE call you still get positive value - it means just something
+else is using it.
+
+More documentation will follow in next versions. The home site for the
+module is http://crds.chemie.unibas.ch/PCI-MIO-E/ - get mbuff-*.tar.gz
+
+--
+Tomasz Motylewski
+<motyl@stan.chemie.unibas.ch>, <motyl@ip.pl>
+
+P.S. I should also mention that there exists another driver
+("portable_shm") written by Paolo Mantegazza which is based on this code
+- it is distributed with RTAI version of real time Linux -
+http://www.aero.polimi.it/projects/rtai/ . It is written for 2.2 SMP
+kernel. However I would recommend you to use my version of the driver :-)

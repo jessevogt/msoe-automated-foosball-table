@@ -1,0 +1,119 @@
+/*
+ * POSIX.1 Signals
+ *
+ * Written by J. Vidal
+ * Copyright (C) Dec, 2002 OCERA Consortium.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2.
+ *
+ * Programs to test POSIX.1 signals implementation.
+ *
+ */
+
+Test programs
+Under this directory, a nice collection of 15 (12+3) test programs can
+be found, distributed over separated subdirectories. To load any
+test program, type "make test" in the corresponding directory.
+The following list, provides a brief description of each one.
+
+IMPORTANT: in order for these tests to run, you have to include
+POSIX_SIGNALS and POSIX_WAIT in the configuration of RTLinux!
+
+condvar.c:
+        In this program a real-time thread sends a signal to itself before 
+becoming blocked on a condition variable. After becoming blocked it executes 
+the signal handler for the previously generated signal. After this, it 
+resumes blocking on the condition variable. 
+
+hello.c:
+        This is a trivial program in which a periodic thread
+sends a signal to itself every time a condition is satisfied.
+The signal handler for that signal prints a message saying
+``Hello world! Signal handler called for signal ...''
+
+ign_signals.c:
+          In this test a master thread sends signals to all its slave threads. 
+Only odd threads should act upon the generated signals. So the other threads 
+have installed the default handler or SIG_IGN.
+
+mutex.c:
+        In this program, various threads are blocked by a mutex.
+While they are blocked by the mutex, the master thread sends signals to them.
+At this point blocked threads execute their signal handlers, but they remain 
+blocked.
+Note: There is also a test version for timed mutexes in the file mutex_timed.c.
+
+nanosleep.c:
+        In this program a thread is sleeping for a while. While it is sleeping
+another thread generates a signal for it. Then the thread is interrupted and
+shows the remaining sleep time.
+
+pending.c: A simple program to test signal delivery order and global 
+sigactions.
+
+posixtest: In this directory you will find three test programs testing 
+sigaction functionality.
+
+rr_sched.c:
+        This program implements a very simple version of the Round-Robin
+scheduler using a periodic thread and user signals. Each scheduled thread has
+three signal handlers: the first suspends that thread, while the second wakes 
+it up. The third signal exits it. The periodic thread has a handler that 
+implements the scheduling algorithm. Each time it has to schedule a thread it 
+sends a signal to itself. Then the handler for that signal sends a signal to 
+suspend the current thread and another to wake up the next thread. Finally, 
+when the scheduler exits, it sends a signal to kill all the scheduled 
+threads.
+
+semaphores.c:
+        In this program, various threads wait on a semaphore.
+While they are blocked another thread sends a signal to half of the
+semaphore-blocked threads. These threads are interrupted and get out of the 
+semaphore. The other threads remain blocked. 
+Note: There is also a test version for timed semaphores in the file 
+semaphores_timed.c
+
+signals.c:
+        This is a test program in which there is a master thread
+and a user defined number of slave-threads. The master thread is
+periodic and sends a signal to all slave threads each time it is woken
+up. Slave threads are suspended and are woken up by their
+signal handlers. After receiving a number of signals, a slave thread blocks
+that signal with "pthread_sigmask". After this no more signals
+are delivered.
+
+sig_intr.c:
+        This program shows what happens when a non-periodic thread
+is executing a handler and is interrupted by a higher priority thread.
+
+sig_prio.c:
+        In this program a thread sends a signal to a higher priority
+thread. At this moment the higher priority thread should take over the CPU.
+Then it suspends the signal generation to prove that it has taken over the CPU.
+
+test.c:
+        This is a simple program to test that the execution of a signal 
+handler can be interrupted by other higher priority threads. In this test two 
+periodic threads are wasting time when they execute their signal handlera.
+Be careful with the amount of computing they do in their signal handlers.
+It can lock up slow processors. A high priority thread interrupts signal
+handler executions periodically every 1 millisecond. Also a higher priority
+signal handler interrupts a lower priority one.
+  A chronogram of what is happening is shown in the file testlog.txt. The 
+first task is the Linux-kernel. The second and the third task are periodic 
+tasks that are executing huge quantity of computing during their signal 
+handlers. The last task is a high frequency periodic task. Finally, the 
+priority is increasing with the number of the task. So the first task has 
+the lowest priority and the last the highest.
+
+wait_4_sig.c:
+        In this program, we prove most of implemented functionalities:
+pthread_sigmask, sigsuspend, pthread_kill, terminating threads from signal
+handlers, blocked mask ... The logic of the program consists in a master
+thread that sends a growing window of signals to the following slave thread. 
+Each slave thread allows only one signal to come through and will hang thereafter.
+I have to get the program to run first...
+Only the handler for the signal that is unblocked will be executed. The other
+signals generated don't have any effect because they are blocked.

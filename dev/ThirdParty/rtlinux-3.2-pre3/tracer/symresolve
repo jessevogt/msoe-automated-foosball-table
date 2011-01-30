@@ -1,0 +1,61 @@
+#!/usr/bin/perl
+
+#
+# (C) Finite State Machine Labs Inc. 1999-2000 <business@fsmlabs.com>
+#
+# Released under the terms of GPL 2.
+# Open RTLinux makes use of a patented process described in
+# US Patent 5,995,745. Use of this process is governed
+# by the Open RTLinux Patent License which can be obtained from
+# www.fsmlabs.com/PATENT or by sending email to
+# licensequestions@fsmlabs.com
+
+# first, build the hash containing the resolved addresses
+# we recognize addresses by angle brackets around them
+
+# open(TEMP, /tmp/Tmp$$);
+
+$KSYMOOPS="ksymoops";
+
+$RTLINUX_DIR=`grep RTLINUX_DIR rtl.mk`;
+$RTLINUX_DIR =~ s%.*= +(.*)\n%$1/System.map%;
+$RTL_DIR=`grep RTL_DIR rtl.mk`;
+$RTL_DIR =~ s%.*= +(.*)\n%$1%;
+
+#open (TEMP, "| cat >/tmp/Tmp$$");
+open (TEMP, "| $KSYMOOPS -x -o $RTL_DIR -o . -m $RTLINUX_DIR >/tmp/Tmp$$") or die "Can run ksymoops: $!";
+
+
+open (TEMPCOPY, ">/tmp/TmpA$$");
+
+while (<>) {
+	print TEMPCOPY $_;
+	print TEMP "EIP: ", $1, "\n" while m/(<[^>]*>)/gc;
+}
+
+close (TEMP);
+close (TEMPCOPY);
+
+open (TEMP, "/tmp/Tmp$$");
+
+while (<TEMP>) {
+	print STDERR if /warning/i;
+	if (/>>EIP; ([^ ]+) (<[^>]+>)/) {
+		$trans{$1} = $2 ;
+	}
+}
+close (TEMP);
+
+open(TEMPCOPY, "/tmp/TmpA$$");
+
+
+# now, write out the output
+
+while (<TEMPCOPY>) {
+	s/<([^>]*)>/$trans{$1}/ge;
+	print $_;
+}
+
+
+unlink "/tmp/Tmp$$";
+unlink "/tmp/TmpA$$";

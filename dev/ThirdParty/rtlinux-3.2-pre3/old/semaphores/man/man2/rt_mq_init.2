@@ -1,0 +1,66 @@
+.\"
+.\" Copyright (C) 1997 Jerry Epplin.  All rights reserved.
+.\"
+.\" Permission is granted to make and distribute verbatim copies of this
+.\" manual provided the copyright notice and this permission notice are
+.\" preserved on all copies.
+.\"
+.\" Permission is granted to copy and distribute modified versions of this
+.\" manual under the conditions for verbatim copying, provided that the
+.\" entire resulting derived work is distributed under the terms of a
+.\" permission notice identical to this one
+.\" 
+.\" The author assumes no responsibility for errors or omissions, or for
+.\" damages resulting from the use of the information contained herein.
+.\" 
+.\" Formatted or processed versions of this manual, if unaccompanied by
+.\" the source, must acknowledge the copyright and authors of this work.
+.\"
+.TH RT_MQ_INIT 2 "26 July 1997" "rt_ipc" "rt_ipc"
+.SH NAME
+rt_mq_init \- create a message queue
+.SH SYNOPSIS
+.nf
+.B #define MODULE
+.B #include <linux/module.h> 
+.B #include <linux/kernel.h> 
+.B #include <linux/version.h> 
+.B #include <linux/errno.h> 
+.B #include "rt_ipc.h"
+.fi
+.sp
+.BI "int rt_mq_init(rt_mq_t *" mq ", int " max_msgs ", int " msg_size ");
+.SH DESCRIPTION
+.B rt_mq_init
+is called to initialize a real-time message queue.  A message queue can
+be used for communicating data among real-time tasks.  Communication
+between Linux processes and real-time tasks is done using the standard
+Real-Time Linux RT-FIFO facilities.
+.PP
+.I mq
+must point to a statically allocated structure.
+.I max_msgs
+is the maximum number of messages allowed, and
+.I msg_size
+is the size of each message.
+.SH "RETURN VALUE"
+On success, 0 is returned.  On failure, a negative value is returned
+as described below.
+.SH ERRORS
+.IP \fB-EINVAL\fP
+.I msg_size
+is negative, or
+.I max_msgs
+is less than one.
+.IP \fB-ENOMEM\fP
+Space could not be allocated for the message queue.
+.SH "BUGS"
+Priority inheritance is not currently supported.
+.SH "AUTHOR"
+Jerry Epplin <JerryEpplin@worldnet.att.net>
+.SH "SEE ALSO"
+.BR rt_mq_destroy (2),
+.BR rt_mq_receive (2),
+.BR rt_mq_send (2),
+.BR rt_task_ipc_delete (2), 
+.BR rt_task_ipc_init (2)

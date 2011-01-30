@@ -1,0 +1,24 @@
+This module allows RT-threads to communicate via serial ports.
+The documentation is in the *.html files.
+
+testcom.c and com_posix.c demonstrate basic communication.
+They send and receive data through COM1 at 38400 bps, 8N1.
+Run make tests to build them.
+
+Before loading the rt_com module, you need to disable the
+Linux serial driver for COM1 by running
+setserial /dev/ttyS0 uart none.
+Then connect another computer's COM port with a nullmodem cable and
+run minicom or another terminal program on the other computer.
+
+
+Note for com_posix.c: even if the table in rt_com.c is changed to use a
+different COM port (e.g., irq=3, io=0x2f8 for /dev/ttyS1 or COM2), the
+RT-thread should still open("/dev/ttyS0").
+
+This is because this version of rt_com assumes the device minor
+numbers correspond to the lines in the rt_com_table. This
+"feature" remains to be fixed (see the TODO file).
+
+Michael Barabanov (baraban@fsmlabs.com)
+

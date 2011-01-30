@@ -1,0 +1,9 @@
+
+this is an example of "signaling" from rt-context to non-rt context to
+wake up a kernel thread. As all the wake_up_* calls in Linux sooner or
+later directly call the scheduler and the signal_* functions also are
+not rt-safe a tasklet is used to jump from rt to non-rt context. Scheduling
+tasklets is safe as its done with atomic bit operations only (see
+include/linux/interrupts.h) 
+
+hofrat

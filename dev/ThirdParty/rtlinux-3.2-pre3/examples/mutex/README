@@ -1,0 +1,9 @@
+This example demonstrate the use of mutexes in RTLinux programs.
+The Linux init_module() function creates three threads that try to compete
+for the mutex.  After successfully locking the mutex, each thread waits
+for 500ms, and then unlocks the mutex.
+The times spent in pthread_mutex_lock are reported
+to show that the RT-threads actually block.
+
+To run the example, type make test. You have to be at a Linux console (no X)
+to see the results.

@@ -1,0 +1,48 @@
+RTL-lwIP doesn't need to be installed, just needs to be compiled.
+(see README section REQUIREMENTS in order to install all the necessary)
+
+Before compiling it take a look at the rtl_lwipopts.h file. Some parameters must be 
+changed (such as the IP address assigned) and others may.
+
+In order to compile RTL-lwIP users must set the macros RTLINUXPATH and LINUXPATH
+in the Makefile.
+
+Before inserting the modules, RT-Linux must be started. Do it by yourself or run
+>./start
+./start also inserts rtl_debug.o, which may help in some cases.
+
+If you've installed all that RTL-lwIP needs to run (see README section REQUIREMENTS), 
+just type 
+>make
+
+It generates three modules that must be inserted in one specific order.
+
+1.- Insert rtl_lwip_tools.o . rtl_lwip_tools has a dinamyc memory manager wich can work with 
+bigphysarea (HIGHLY RECOMMENDED). If you are not using bigphysarea (ok, do it youself)
+just run
+>insmod rtl_lwip_tools.o
+If you're using bigphysarea, configure the memory that de memory manager is going to
+use in the script instools and then run it:
+>./instools
+
+2.- Insert the rt_3c905x_phys.o module. You can do that by hand or running the script 
+>./inscard
+
+3.- And finally insert the RTL-lwIP TCP/IP stack:
+>insmod rtl_lwip_stack.o
+
+
+RTL-lwIP by itself doesn't do anything. You can ping the RTL-lwIP TCP/IP stack from other
+machine if you want, but that is all what you can do just with RTL-lwIP TCP/IP stack.
+
+Try to compile some of the examples in the $(RTL_LWIP_SOURCES)/examples and test it.
+Also, in the $(RTL_LWIP_SOURCES)/unix you will find Linux applications that will help
+you to test some of the examples. Read README in those directorys.
+
+
+Sergio.
+
+For more info, please visit the RTL-lwIP web page:
+
+http://canals.disca.upv.es/~serpeal/RTL-lwIP/htmlFiles/index.html
+

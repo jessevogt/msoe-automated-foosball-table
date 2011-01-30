@@ -1,0 +1,8 @@
+
+copy a file from within kernel space - directly managing file from within
+kernel space is not very elegant but somtimes something usefull - especiall
+as rt-threads operate in kernel space and geting some user-space instance to
+copy/move/manipulate files on behalf of a rt-thread could be even uglier...
+
+kcp.o: simply kernel module that copies the src file to dst file in kernel
+       mode using the filesystem specific methods provided by VFS

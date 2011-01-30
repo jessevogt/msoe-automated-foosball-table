@@ -1,0 +1,22 @@
+The RTL-lwIP project, besides the SISTEMAS DE TIEMPO REAL EMPOTRADOS, FIABLES Y
+DISTRIBUIDOS BASADOS EN COMPONENTES own work, consists basicly in two portings:
+
+- Porting lwIP to RT-Linux - which author is Adam Dunkels - and
+- porting the Linux driver for the 3Com905C-X Ethernet Network Card - written by 
+  Donald Becker - to RT-Linux.
+
+The SISTEMAS DE TIEMPO REAL EMPOTRADOS, FIABLES Y DISTRIBUIDOS BASADOS EN COMPONENTES
+people would like to thank those who have helped in any manner to develope this 
+project:
+
+- Kieran Mansley who helped with licensing and lwIP questions and discussions.
+- Marc Boucher who ported the Asyncronous DNS client to lwIP enhancing the 
+  capabilities of RTL-lwIP.
+- Der Herr Hofrat, helped with RT-Linux questions and also with licensing questions.
+- Ismael Ripoll, helped with ideas, answering questions, preparing the RTL-lwIP 
+  distribution, and more ...
+- Josep Vidal, helped with timers and signals questions.
+- Miguel Masmano, whose implementation of a dinamyc memory manager is hardly used here.
+- Joan Vila, which guided the project from the beginning.
+
+Thanks to all.

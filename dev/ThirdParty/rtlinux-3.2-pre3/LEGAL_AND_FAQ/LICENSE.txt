@@ -1,0 +1,198 @@
+
+                    FSMLABS Licensing for RTLinux/Free 
+
+   This document specifies the licensing for this release of
+   RTLinux/Free. Individual files in this release are each labeled with
+   an identification of the applicable license. FSMLabs copyrighted files
+   that are labeled as GPL are licensed by FSMLabs for use under GPL
+   version 2.0 which is included with the RTLinux source tree. The entire
+   RTLinux release is licensed under the RTLinux Open Patent License
+   Version 2 which is also included with the release. Please read and
+   make certain you understand both licenses. If you do not agree to the
+   terms of both licenses, you may not use, copy, modify, or distribute
+   this software.
+
+   The licenses, the source management files from Bitkeeper and the
+   documentation are copyright FSMLabs. You may copy them verbatim, but
+   you are not permitted to make any changes in those files. RTLinux is a
+   registered trademark and FSMLabs is a service mark of Finite State
+   Machine Labs Inc. As long as you agree to and do not violate the terms
+   of the GPL V2.0 and the Open RTLinux Patent License, you are granted
+   permission to label unmodified re-distributed copies of this release
+   as "Third Party Distributed FSMLabs Free RTLinux®" and you may also
+   label modified re-distributed versions as "Third Party Distributed
+   Modified FSMLabs Free RTLinux®". You may not use either mark in any
+   other manner without explicit permission of FSMLabs.
+
+   This release of RTLinux/Free is not released as "Open RTLinux Code"
+   and does not qualify under paragraph "B" of "Approved use" in the
+   Open RTLinux Patent License.
+
+   Trademarks: RTLinux and FSMLabs are registered trademarks of Finite
+   State Machine Labs Inc. Linux is a registered trademark of Linus
+   Torvalds..
+
+                                   A FAQ
+
+   Disclaimer: This is not legal advice. Laws governing software
+   intellectual property are complicated and vary around the world.
+   Please consult a lawyer to get legal advice. Descriptions of license
+   terms here are in informal language and necessarily imprecise -
+   consult the text of the licenses for exact terms.
+
+   Do I need RTLinux/Pro and/or a commercial license or can I use a
+   version of RTLinux/Free?
+
+   If you are developing commercial software or making commercial or
+   other government use of RTLinux/Free, we request that you buy a
+   license or a support contract. Please consider carefully whether you
+   get a benefit from our work and would like to see it continue. If you
+   are developing GPL V2.0 code only, you don't need a special license -
+   although you may want the Pro version for other reasons. If your
+   applications include non-GPL code, you may or may not need an
+   additional license, but we suggest some care. The GPL requires that
+   all work derived from GPL software be released under GPL. The Open
+   RTLinux Patent License provides a royalty free use of the patent only
+   for GPL code. Contrary to what you might read on the Internet, "using
+   an API" or "putting code in modules" or other tricks to make a barrier
+   between GPL and non-GPL code don't work. If you have questions, ask us
+   by sending email to info@fsmlabs.com.
+
+   If I start with a version of RTLinux®/Free what parts of my code do I
+   have to GPL?
+
+   The GPL is quite definitive on the following condition: If you begin
+   with a GPL Program and produce a new program from the original GPL
+   Program so that the new program is "derived" from the original, the
+   new program must also be released under the GPL. The simple case for
+   this is when your new program is produced by a change in the code of
+   the original program. In this case, you must license the new program
+   including the changes under the GPL. Things are more complex when the
+   new program is produced by attaching a plug-in, a module, or a
+   discrete component of some sort to the original program.
+
+   Linus Torvalds has attached to the Linux license an explicit note that
+   running a program under Linux does not subject that program to the
+   GPL. RTLinux/Free does not have such an exception. RTLinux/Free is a
+   program that runs Linux as an application. Applications that run under
+   Linux are probably protected by Torvalds exception: certainly many big
+   companies are relying on this. Applications that run under control of
+   the RTLinux/Free kernel are not Linux applications and do not come
+   under this exception. We require that any derived work be released
+   under the GPL unless you purchase a commercial license from FSMLabs.
+   You may be interested in reading a discussion of this issue in:
+
+         http://www.gnu.org/licenses/gpl-faq.html#GPLModuleLicense
+
+   RTLinux/Free and any GPL implementation of the RTLinux dual kernel
+   process are also restricted under the terms of the Open RTLinux Patent
+   License. This license permits royalty free use of the RTLinux dual
+   kernel process by GPL software, and it offers only one, limited
+   exception to this requirement. In general, all components of software
+   (modules, programs, plugins, code, etc.) that are used with the
+   RTLinux dual kernel process under this license must be released under
+   the GPL. That is, if an application, as a whole, makes use of the
+   RTLinux dual kernel process under the GPL provisions of the Open
+   RTLinux Patent License, the software as a whole must be licensed under
+   the GPL under the strictest interpretation of the provisions of the
+   GPL. You cannot meet the requirements of the license by splitting
+   software into separate programs,modules, or other software components
+   and only releasing some of them under the GPL. The GPL is a copyright
+   license and so the boundaries that might exist between programs,
+   modules, or other software components are boundaries of the effect of
+   the GPL. The Open Patent License applies to " software" that makes use
+   of the patented process even if this software consists of many
+   distinct programs, modules, or other software components."
+
+   As an example, if you distribute a data acquisition system that
+   consists of an implementation of the RTLinux dual kernel process, a
+   driver, and a control program, the entire collection of programs must
+   be licensed under the GPL in order to make use of the royalty free
+   Open RTLinux Patent License. If your program only makes incidental use
+   of the RTLinux Patented Process it is not subject to the license - but
+   we suggest that you either ask us or get qualified legal advice. Both
+   the GPL and the RTLinux Open Patent License are aimed at facilitating
+   use of GPL code with GPL code, and you should be careful about other
+   uses.
+
+   What is the difference between RTLinux/Free and Open RTLinux?
+
+   Certain releases of RTLinux/Free are designated by FSMLabs as
+   OpenRTLinux releases. These releases are intended to provide some
+   limited exceptions to the GPL for commercial users of RTLinux/Free by
+   allowing for non-GPL modules to be linked - see section "B" of
+   "Approved uses". In order to make use of these exceptions, the user or
+   distributor must agree to the additional license terms.
+
+   Can I submit patches to RTLinux?
+
+   Yes, of course, We take nearly anything reasonable into the
+   "contributions" list. Code that we like and test gets integrated into
+   the main body of the code. Like nearly all other open-source projects,
+   we require a release before we integrate contributions into the main
+   code. Most other projects, such as GCC and ReiserFS, require
+   assignment of copyright. We don't ask for copyright, because we do not
+   want to restrict your rights to later reuse your code. Instead, we
+   require a release so that we retain our rights over RTLinux. See the
+   file CONTRIBUTION for details.
+
+   Why is RTLinux/Pro not covered under the GPL?
+
+   The GPL is a license that is offered by the copyright owners of some
+   programs. The copyright owners still own the code however, and have
+   unchallenged right to license the code under any other terms of their
+   choice. Since FSMLabs owns the copyright for RTLinux outright, FSMLabs
+   has the right to offer a version of its RTLinux software under a
+   commercial license as well. Since RTLinux is not derived from Linux,
+   but is an independent program that uses Linux as an optional
+   application, RTLinux is not subject to the terms of the Linux GPL.
+
+   The commercial version of RTLinux - RTLinux/Pro -- can be purchased
+   with or without source. If you purchase source, you get the right to
+   modify the source and to distribute your modifications without GPL
+   restrictions. You may distribute changes and RTLinux itself in binary
+   form under that license --- as long as you pay the appropriate
+   royalties and fees. You may not redistribute our source. Please
+   contact us to discuss the specific terms and conditions of FSMLabs
+   commercial license.
+
+   Doesn't RTLinux/Pro share address space with Linux?
+
+   It is sometimes argued that programs that run in the same hardware
+   memory space with a GPL program must be released under GPL. This is
+   not strictly correct. The test is whether the result is a "derived
+   work", A little thought shows that this distinction is necessary: BIOS
+   programs run in the hardware address space shared with Linux, MS DOS ,
+   which has no hardware memory protection, runs GPL programs, uCLinux
+   only runs on processors with no hardware memory protection at all and
+   so on. The important issue is not whether the hardware enforces
+   address space separation, but whether the programs are independent and
+   running in their own logical address spaces or whether they are
+   components of the same program using a logical single address space.
+
+   When RTLinux starts running, it allocates memory for its own use or
+   attaches to pre-allocated memory and this memory space is intended to
+   be used by RTLinux and not shared with Linux. In fact, the entire
+   real-time capability of RTLinux depends deeply on the very limited and
+   highly structured nature of interactions between RTLinux and the
+   general purpose operating system base. RTLinux generally does not use
+   hardware to enforce this separation of address space, but this is an
+   implementation choice to improve efficiency and has nothing to do with
+   whether there is the kind of sharing of address space that is seen
+   when a program is linked to a library.
+
+   What is the legal situation of RTAI?
+
+   FSMLabs wants to encourage experimentation with the RTLinux process
+   and derived programs under the provisions of the RTLinux Open Patent
+   License and the GPL. We try very hard to avoid imposing unnecessary
+   restrictions, especially on educational and other non-commercial use.
+   However, programs derived from RTLinux source, or making use of the
+   RTLinux Open Patent license are required to follow the terms of the
+   Open Patent License (where applicable) and the GPL. People modifying,
+   distributing or using this code have no legal right to grant further
+   rights or to re-license under other licenses. Many commercial projects
+   need to escape from the GPL restrictions and we are happy to offer
+   additional licenses to those projects. If you are using RTAI for a
+   product and your product contains non-GPL code, you should contact
+   FSMLabs to determine whether you need a commercial license.

@@ -1,0 +1,10 @@
+
+This is a collection of kernel modules that interface user and non-rt kernel 
+space to rt-threads in different ways - they are intended as examples only 
+so don't expect clean error handling on all cases or optimized performance
+that is up to you...
+
+feedback/improvments/comments appreciated
+
+thx !
+hofrat

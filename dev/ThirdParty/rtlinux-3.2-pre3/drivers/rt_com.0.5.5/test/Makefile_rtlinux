@@ -1,0 +1,43 @@
+# Makefile for the test example with RTLinux V3
+
+all: testcom.o
+
+include ../../../rtl.mk
+clean:
+	rm -f *.o
+
+test: all
+	@echo ""
+	@echo "This is the test for the rt_com driver."
+	@echo "If you connect a modem to ttyS0 it"
+	@echo "will respond OK to each AT command sended."
+	@echo "First we remove any existing rtl-modules"
+	@echo "You may see error warnings from \"make\" - ignore them"
+	@echo "Type <return> to continue"
+	@read junk
+	-rmmod testcom
+	-rmmod rt_com
+	(cd $(RTL_DIR); scripts/rmrtl)
+	@echo "Now insert the fifo and scheduler"
+	@echo "Type <return> to continue"
+	@read junk
+	(cd $(RTL_DIR); scripts/insrtl)
+	@echo "Now insert the driver module rt_com"
+	@echo "Type <return> to continue"
+	@read junk
+	@setserial /dev/ttyS0 uart none
+	@insmod ../rt_com.o
+	@echo "Now start the real-time task module"
+	@echo "Type <return> to continue"
+	@read junk
+	@insmod testcom.o
+	@sleep 3
+	@echo "Now let's stop the application"
+	@echo "Type <return> to finish"
+	@read junk
+	@rmmod testcom
+	@rmmod rt_com
+
+include $(RTL_DIR)/Rules.make
+
+

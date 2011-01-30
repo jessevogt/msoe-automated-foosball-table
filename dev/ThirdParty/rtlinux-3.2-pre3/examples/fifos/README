@@ -1,0 +1,15 @@
+
+
+posix_fifo.c      : pure POSIX example - basically its passing O_CREATE to
+                    open instead of calling rtf_create.
+simple_fifo.c     : thats about as simple as fifo get on the rt-side
+read_fifo.c       : and on the user side
+fifo_ioctl.c      : setting up a fifo ioctl using the now available
+                    macros in include/rtl_fifo.h - this will no work
+                    with older versions than the current cvs (as of Feb 8 2004)
+user_fifo_ioctl.c : usage of the registered ioctl from user-space
+
+feedback and error reports to the list and to der.herr@hofr.at
+
+thx !
+hofrat

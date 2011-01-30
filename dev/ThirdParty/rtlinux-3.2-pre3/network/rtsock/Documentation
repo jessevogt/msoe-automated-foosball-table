@@ -1,0 +1,202 @@
+RTSOCK
+
+Written by Robert Kavaler (kavaler@innomedia.com)
+
+Copyright (C) 1998-2003, Innomedia, Inc.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+ 
+Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer. 
+
+Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following
+disclaimer in the documentation and/or other materials
+provided with the distribution. 
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS
+AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+THE POSSIBILITY OF SUCH DAMAGE.
+
+Update 4/29/03
+Limited printk's for dropped packets and lost packets to reduce logging.
+Fix bug when multiple rtsock devices are used. Moved version dependencies
+to beginning of source file.  Changed spinlock to rwlock.
+
+Update 3/14/03
+Commented out sk->stamp = skb->stamp to remove dropped packets.
+Reference for symbol ip_queue_xmit is now determined automatically without
+the need to patch the kernel.  Updated documentation accordingly.
+
+Update 7/20/02
+Rtsock now support rtlinux 3.1 and the 2.4.4 linux kernel.
+
+Update 6/17/02
+Added test/example code.  See test directory for details.
+
+Added new ioctl RTSOCK_IOCINTERFACE to interface to avoid passing opaque 
+kernel pointer through user task.
+
+RTSOCK_IOCINTERFACE:  This interface replaces the RTSOCK_IOCGETSOCKADDR
+interface.  To use the interface, each rtsock has a callback that will be
+called when the RTSOCK_IOCINTERFACE ioctl call is made.  The callback has three
+parameters: an opaque pointer passed with the callback register, a pointer
+to referenced linux "struct sock" and the args passed to the ioctl.  The first
+arg is always the local file descriptor (i.e. fd integer) for the socket.
+This interface, therefore, allows the rtsock user to make an association 
+between any user task data (i.e. parameters) and the underlying socket 
+structure.  See the example for more information.
+
+Update 8/23/00
+Rtsock now supports 2.4 kernels
+
+Initial Release 1/20/00
+Rtsock is an RTLinux interface to the Linux socket world.  Rtsock is not a
+device driver for network cards.  Instead, packets flow through the Linux 
+kernel using the standard Linux drivers, up/down the standard layer 2 and 
+layer 3 protocols, and then packets are diverted into an RTLinux task.  
+Currently only UDP sockets are supported.
+
+The advantage of this approach over implementing a real-time ethernet driver 
+is that all of the standard L2 and L3 protocols already implemented in the 
+kernel are available to the real-time task.  Thus, all Linux routing 
+protocols, ifconfigs, ARP, RARP, QoS, netfiltering and other packet level 
+processes are applied to the real-time socket.  Of 
+course, the disadvantage is that the delay through the Linux kernel is 
+not fixed and therefore the packets generated in the real-time kernel 
+will not come out of the kernel in "real-time" (i.e. with low jitter).  Then
+again, ethernet itself is not a low jitter medium.
+
+The RT interface to rtsock uses the standard Linux socket calls in user 
+space and a non-standard interface in RT space.
+
+The API works as follows (this is an overview):
+
+Initialization:
+
+1.  The rtsock driver is loaded with modprobe or insmod.  It needs a 
+mknod'd device (/dev/rtsock0-5) to communicate between the user
+tasks and the realtime tasks. 
+
+2.  The RT task wishing to use rtsock is loaded with modprobe or insmod
+and during initialization it must call rtsock_create with the minor device 
+number (X) and other parameters. Each minor device (rtsock currently 
+supports up to 6 minor devices) corresponds to a "pool" of sockets that 
+are to be handled by a single RT "dequeue_skb" call.  Each pool also has a set
+of fixed length skb's that are allocated at initialization and replenished as
+they are used.  The parameters fromRTmax_count and toRTmax_count define the 
+size of the queues used to communicate between linux and rtlinux.  The
+main constraint is that (fromRT + toRT) < 32000 (assuming max linux kmalloc is
+128K bytes).  The skbLength specified in the rtsock_create call is the length
+of layers 5 and above; an additional 16 + 60 + 8 bytes are included for layers
+2, 3 and 4 respectively.
+
+2. The user task opens "/dev/rtsockX" (fd).  This device is used to 
+perform ioctls to manipulate sockets.  (Implementation note: the 
+ioctls could have been added to the sockets 
+themselves, but this would require modifying 
+the kernel.)  The minor device number (X) forms the link between the user
+task and the RT task.
+
+Next, on a per socket basis:
+
+1.  The user task creates a socket (s) and binds the socket as usual.  Even
+though only UDP packets are supported, currently the user must "connect" the
+socket to the far end for rtsock to work.  Packets can be sent and received
+using the standard Linux socket prior to and after redirecting the socket
+to rtsock.  These Linux packets can be sent using "sendto".
+
+2.  When the user task wishes to redirect the packet sequence to
+rtsock it uses the sequence
+
+	long s1, s;
+
+	s1 = s; 
+	ioctl(fd, RTSOCK_IOCGETSOCKADDR, &s1);
+
+which returns a pointer (s1) that should be passed into the RT task.  How
+the pointer s1 gets to the RT task is not dealt with by rtsock.  Normally,
+RT tasks have a command queue that is processed by the RT task, and it is 
+assumed that s1 will be passed using some command in that queue.
+
+3.  The RT task MUST reference count the socket pointer (s1) using
+rtsock_reference_sock.  
+
+4.  The RT task can now allocate skb's using rtsock_alloc_skb, 
+and send those skb's via the socket (s1) using rtsock_enqueue_skb.
+
+5.  The user task calls ioctl(fd, RTSOCK_IOCREDIRECTFD, &s) to redirect input
+packets to the rtsock.
+
+6.  The RT task can now receive packets from the rtsock using 
+rtsock_dequeue_skb.  Rtsock_dequeue_skb actually receives ALL of the packets
+for a given rtsock (which may be multiple sockets).  In order to speed
+the lookup of the socket pointer, the user_data field of the struct sock
+is modified by the real-time task to point to an internal data structure.
+
+7.  When done with a sock, the RT task must deferenece the socket (s1)
+using rtsock_dereference_sock.
+
+8.  The user task should close the socket (s1) only AFTER the socket is longer
+needed by the RT task.
+
+9.  The user task can redirect the input packets back to the user task using 
+ioctl(fd, RTSOCK_IOCRESETFD, &s).
+
+10.  Since ICMP messages are not redirected to the RT task, they are processed
+by the Linux stack and therefore the user task will receive the errors for
+a socket.  THIS IS A GOOD THING, as it allows the linux task to "manage" the 
+socket and the RT task handle only the real-time packets.
+
+Manipulating packets in the RT task:
+
+An RT task can use the standard Linux "skb_put" call and similar calls to
+manipulate/create packets. However, caution should taken to never underflow
+or overflow the skb.  Underflow and overflow will cause the RT task to call
+kmalloc to grow the packet, and that will in turn cause unpredicatable 
+performance (and maybe crashing).  Thus the "__skb_put" version of the packet
+manipulation routines should be used.
+
+Before an skb can be sent with "rsock_enqueue_sock" it must first be given
+an "owner sock" using "skb_set_owner_w".  The owner sock is the
+sock onto which the skb is queued.
+
+Limitations:
+
+* Currently only UDP sockets can use the rtsock interface.
+
+* UDP packets are sent to the connected destination port only -- there is no 
+equivalent to sendmsg.
+
+Applications for the rtsock interface:
+
+The main application for the rtsock interface is in situations that require 
+real-time generation or consumption of standard UDP packets in an otherwise
+asynchronous network.  One example is a time-tick that must be generated at 
+a fixed rate to a large group of machines.  Another is for RTP sessions in 
+a VoIP application, when the generator/consumer is a DSP or Video card running
+with a constant clock, but the network side is a standard ethernet.  In this 
+case, a "jitter buffer" must be implemented in the real-time task.
+
+Installation:
+
+1. Run "make" in this directory.  The output file is rtsock.o
+
+2. Run "make devs" to create the "/dev/rtsock0-5" devices.
+
+3. Run "insmod rtsock.o" as superuser to load the rtsock module.

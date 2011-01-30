@@ -1,0 +1,173 @@
+#!/bin/sh
+#
+#  Utility : rtlinux
+#   Author : Edgar F. Hilton
+#     Date : Nov. 18, 1999 and Sep 18, 2000
+# Warranty : GPL
+#   System : Linux 2.2.x kernels
+# 
+# NOTE: 
+# A full list of RTLinux modules must be edited into the "INSERT_LIST"
+# variable below in the proper sequence of insertion
+
+# insertion sequence for RTLinux modules (assume user modules will go last)
+RTL_MODULES_LIST=`rtl-config --modules`
+
+# usage message
+usage ()
+{
+    echo "USAGE: "
+    echo "     rtlinux {start|stop|status} [module(s)]"
+    echo
+    echo "EXAMPLES:"
+    echo 
+    echo "                       To insert RTLinux only --> ./rtlinux start"
+    echo "               To remove RTLinux modules only --> ./rtlinux stop"
+    echo "              To check status of RTLinux only --> ./rtlinux status"
+    echo "     To insert RTLinux and foo{1,2}.o modules --> ./rtlinux start foo1 foo2"
+    echo "     To remove foo{1,2}.o and RTLinux modules --> ./rtlinux stop foo1 foo2"
+    echo "To check status of RTLinux and foo{1,2}.o modules --> ./rtlinux status foo1 foo2"
+    echo
+    echo "Copyright 2000, Finite State Machine Labs, Inc."
+    echo "Questions? Contact Edgar F. Hilton <efhilton@fsmlabs.com>"
+    echo
+}
+
+if [ $# -eq 0 ]; then
+    usage 1 1
+    exit 1
+else
+    COMMAND=$1
+fi
+
+# binary used to insert the modules
+if [ -x /sbin/modprobe ]; then
+    MODPROBE="/sbin/modprobe -a"
+else
+    MODPROBE="`which modprobe` -a"
+    if [ ! -x $MODPROBE ]; then
+	echo "ERROR: 'modprobe' was not found in your path"
+	exit 1
+    fi
+fi
+
+if [ -x /sbin/insmod ]; then
+    INSMOD=/sbin/insmod
+else
+    INSMOD=`which insmod`
+    if [ ! -x $INSMOD ]; then
+	echo "ERROR: 'insmod' was not found in your path"
+	exit 1
+    fi
+fi
+
+# binary used to remove the modules
+if [ -x /sbin/rmmod ]; then
+    RMMOD="/sbin/rmmod -r"
+else
+    RMMOD="`which rmmod` -r"
+    if [ ! -x $RMMOD ]; then
+	echo "ERROR: 'rmmod' was not found in your path"
+	exit 1
+    fi
+fi
+
+# binary used to list modules
+if [ -x /sbin/lsmod ]; then
+    LSMOD=/sbin/lsmod
+else
+    LSMOD=`which lsmod`
+    if [ ! -x $LSMOD ]; then
+	echo "ERROR: 'lsmod' was not found in your path"
+	exit 1
+    fi
+fi
+
+# path to grep
+GREP=`which grep`
+if [ ! -x $GREP ]; then
+    echo "ERROR: 'grep' was not found in your path"
+    exit 1
+fi
+
+# add the user-specified module to the insert and remove list, respectively
+USER_INS_LIST=""
+TOTAL_LIST=${RTL_MODULES_LIST}
+
+if [ $# -ge 2 ] ; then
+    shift 1
+    for modules in $@
+    do
+	TEMP=`echo $modules | sed -e s/"\.o"$//`
+	USER_INS_LIST="$USER_INS_LIST $TEMP.o"
+    done
+fi
+
+# reverse the USER_INS_LIST to create a removal sequence for user modules
+USER_DEL_LIST=""
+for modules in $USER_INS_LIST; do
+    TEMP=`echo $modules | sed -e s/"\.o"$//`
+    USER_DEL_LIST="$TEMP $USER_DEL_LIST"
+done
+TOTAL_LIST="${USER_DEL_LIST} ${TOTAL_LIST}"
+
+# Do the heavy work...
+case "$COMMAND" in
+  start|insert)
+	${MODPROBE} ${RTL_MODULES_LIST}
+
+	for modules in $USER_INS_LIST
+	do
+           ${INSMOD}  $modules
+	done
+	
+	$0 status ${USER_INS_LIST}
+	;;
+  stop|remove)
+	for modules in $USER_DEL_LIST
+	do
+	    MODINS=`${LSMOD} | ${GREP} ^$modules`
+	    if [ "$MODINS" ]; then
+		${RMMOD} $modules
+	    fi
+	done
+
+	for modules in ${RTL_MODULES_LIST}
+	do
+	    MODINS=`${LSMOD} | ${GREP} ^$modules`
+	    if [ "$MODINS" ]; then
+		${RMMOD} $modules
+	    fi
+	done
+
+	$0 status ${USER_DEL_LIST}
+	;;
+  status)
+	echo
+	echo "Scheme: (-) not loaded, (+) loaded"
+	for modules in $TOTAL_LIST
+	do
+	    MODINS=`${LSMOD} | ${GREP} ^$modules`
+	    if [ "$MODINS" ]; then
+		echo "  (+) $modules "
+	    else	
+		echo "  (-) $modules "
+	    fi
+	done
+	;;
+  *)
+    usage 1 1
+    exit 1
+esac
+
+# Exit normally
+echo
+exit 0
+
+
+
+
+
+
+
+

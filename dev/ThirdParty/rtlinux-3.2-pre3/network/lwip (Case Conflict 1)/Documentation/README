@@ -1,0 +1,29 @@
+Once inserted, the stack offers a sockets-like API to the RT-Tasks
+that can be used to send and receive packets over a network. The
+sockets API is build over the "sequential API" (which is quite similar
+to the BSD socket API) and achieves effectiveness using RTL-lwIP as it
+utilizes knowledge of the internal structure of the stack. RTL-lwIP
+also offers another API called raw API which is not only faster in
+terms of code execution time but is also less memory intensive. Two
+reports written by Adam Dunkels (lwIP's author) include a reference
+manual of the lwIP API, a manual for the raw API and a description of
+the sockets API (note that all communication APIs are inherited from
+lwIP, so more documentation can be found in its home page)
+
+
+- The manual describing the raw API is raw_api.txt which is included
+in this directory.  
+- The lwIP API and the sockets API can be found in
+this location:
+
+http://www.sics.se/~adam/lwip/doc/lwip.pdf
+
+- The Operating System Emulation Layer API is described in OSEL.pdf,
+also included in this directory.
+
+
+Visit the RTL-lwIP web site:
+
+http://canals.disca.upv.es/~serpeal/RTL-lwIP/htmlFiles/index.html
+
+There you can find references to more documentation.

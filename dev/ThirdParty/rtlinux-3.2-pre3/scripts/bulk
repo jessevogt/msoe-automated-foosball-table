@@ -1,0 +1,12 @@
+#!/bin/sh
+while true
+do
+rmmod bulk_module
+scripts/rmrtl;
+scripts/insrtl;
+rmmod rtl_fifo
+insmod modules/rtl_fifo.o
+insmod measurement/bulk_module.o
+echo "start test"
+measurement/bulk_app
+done

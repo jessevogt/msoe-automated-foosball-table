@@ -1,0 +1,23 @@
+rt_com
+======
+
+This is a serial port driver for RT-Linux.
+
+Send any comments to the RT-Linux mailing list at <rtl@rtlinux.cs.nmt.edu> and
+to <jochen@uni-duesseldorf.de>. Patches are wellcome, please include a
+descriiption with them.
+
+
+Installation notes:
+
+To compile, either use
+
+  make -f Makefile.cvs
+
+or put it into your automake/autoconf'ed project and add it as a subdir.
+After compilation insmod the module and you are ready to go.
+
+(Since I use automake/autoconf the Makefile.standalone might not be
+up-to date.)
+
+Jochen

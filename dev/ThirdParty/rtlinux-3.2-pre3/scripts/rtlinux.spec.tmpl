@@ -1,0 +1,37 @@
+Summary: RTLinux - Linux with real-time support
+Name: rtlinux
+Vendor: FSMLabs http://www.fsmlabs.com/
+Version: %{rtlversion}
+%ifarch i386 i486 i586 i686
+Release: %{rtlrelease}.smp__linux_%{kernelrelease}
+%else
+Release: %{rtlrelease}.smp
+%endif
+Copyright: GPL
+Group: System Environment/Kernel
+URL: http://www.rtlinux.com/
+Packager: Cort Dougan <cort@fsmlabs.com>
+Source: rtlinux.tar.gz
+BuildRoot: /tmp/rtlinux-root
+
+%description
+This RTLinux package provides the functionality necessary to run
+RTLinux %{rtlversion}-%{rtlrelease}, built against kernel %{kernelrelease}.
+
+%prep
+%setup
+%build
+%install
+%post
+depmod -a
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files
+/lib/modules/*/misc/*.o
+/dev/rtf*
+/usr/rtlinux*
+/usr/lib/
+/boot
+%config

@@ -1,0 +1,102 @@
+	RTLinux upgrading notes: API, installation, usage
+
+Michael Barabanov (baraban@fsmlabs.com)
+Copyright FSMLabs Inc. 1999. All rights reserved.
+
+This information is for people upgrading from previous versions
+(1.3 and earlier) of RTLinux.
+
+RTLinux versions 2.x and above provide a new API that is aiming
+to POSIX compliance. This has many nice implications, so
+you are encouraged to update your programs to use the new interface.
+
+To get started, please read the GettingStarted.txt file. Most of the new
+API functions are the POSIX functions. Documentation for these functions
+can be found in the Single UNIX specification
+(http://www.opengroup.org/onlinepubs/7908799/index.html).
+The Single UNIX spec is also included locally in HTML format with the 
+RTLinux distribution.
+
+There are also certain non-POSIX extension functions in the new API.
+There are manual pages for these functions in the man/ directory.
+
+Here's a description of how the old RT-task API maps to the new 
+pthread-based one.
+
+Old API				New API
+
+rt_get_time			gethrtime(3), clock_gettime(3), clock_gethrtime(3)
+rt_task_init			pthread_create(3)
+rt_task_delete			pthread_delete_np (3)
+rt_task_make_periodic		pthread_make_periodic_np (3), clock_nanosleep(3)
+rt_task_wait			pthread_wait_np(3)
+request_RTirq			rtl_request_irq(3), rtl_hard_enable_irq(3)
+free_RTirq			rtl_free_irq(3)
+
+NOTES
+
+0. Whereas RTLinux v1 and v2 only had rt_get_time() for obtaining the current
+time, the latest versions of RTLinux have several software clock sources,
+each with a specific purpose.  You can use the function
+clock_gethrtime(3) to obtain a reading from a specific clock.
+
+Most blocking functions that to not explicitely specify the clock,
+accepts timeouts with respects to the standard POSIX clock, CLOCK_REALTIME.
+CLOCK_REALTIME measures time elapsed since the Epoch.
+The notable exception is the pthread_make_periodic_np, that schedules
+threads with respect to CPU-local RT-scheduler clock, CLOCK_RTL_SCHED. 
+
+CLOCK_MONOTONIC is another POSIX standard clock.
+It provides a high-resolution timestamp source.
+gethrtime() is a shorthand for clock_gethrtime(CLOCK_MONOTONIC).
+
+1. Unlike rt_task_init, pthread_create starts the task immediately.
+Please note that this causes some restructuring of periodic tasks code:
+
+OLD WAY:				NEW WAY:
+
+task_code() {				thread_code() {	
+	while(1) {                      	while(1) {
+// NOTE, THE ORDER CHANGES!
+							pthread_wait_np();
+		do_work();              		do_work();
+		rt_task_wait();         		
+	}                               	}
+}                                       }
+                                        
+init_module() {                         init_module() {
+	rt_task_init(...);                 	pthread_create(...);
+	rt_task_make_periodic(...);        	pthread_(...);
+}					}
+
+
+Switching to the new API also affects enabling RT-tasks to use FPU operations.
+Calling pthread_use_fp_np after pthread_create is generally too late. It is
+therefore best to use pthread attributes (pthread_attr_setfp_np(3)) to enable
+FPU operations before any thread code executes. Please see
+examples/fp/rt_process.c.
+
+2. With rtl_request_irq(3), hardware interrupts must be explicitely
+enabled in the handler with rtl_hard_enable_irq(3) to receive further
+interrupts.
+
+The old API is also supported in RTLinux v2.x and v3.x. It is implemented
+on top of the current API (include/rtl_compat.h, schedulers/rtl_compat.c).
+
+Other notable differences:
+
+- RTLinux components have been separated from the Linux kernel.
+Please see the INSTALL file for installation instructions.
+
+- Building your own programs is much simplified by using
+the rtl.mk file. This file is created during compilation of RTLinux
+It contains gcc compiler flags, include paths: everything that is needed
+to build an RTLinux program module.
+
+- User processes should close all open RT-FIFOs before the module
+that created them can be unloaded.
+
+
+Please direct comments and suggestions about this file to
+Michael Barabanov <baraban@fsmlabs.com>
+

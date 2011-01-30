@@ -1,0 +1,18 @@
+
+rt_sig_thread is a kernel module that creats a rt-thread and a kthread that
+has a uniq process name and id. As name for the thread the rt-thread id is 
+used. This kthread is only a "singal-dispatcher" for the rt-thread to pass
+on unix signals sent via  kill -# PIDOF_KTHREAD  on to the rt-thread.
+
+Any singal other that SIG_KILL will wake up the rt-thrad - SIG_KILL will be 
+sent on to the rt-thread as RTL_SIGNAL_CANCEL. The signal can be sent by 
+calling pthread_delete_np() on the rt-thread or by setting the rt_threads
+signal pending mask with bit-operations. both variants are safe as 
+bit-operations are atomic.
+
+Note that the kthreads exit must be synchronized in cleanup module - the method
+is not very elegant but should be safe. When the kthread exits its main loop 
+it sets a global variable that is used by cleanup_module to wait on the kthread
+exit.
+
+hofrat

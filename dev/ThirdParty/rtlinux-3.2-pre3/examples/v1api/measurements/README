@@ -1,0 +1,10 @@
+The rt_process.c and monitor.c comprise an example program that tests
+scheduling accuracy.  Execute "make test" or "run.sh" to run it. The Makefile
+contains some insights.
+
+The programs in *irq*.c test interrupt response times of both Linux and
+RTLinux. You need two machines and a parallel cable to use it.
+
+To do: this should be documented in more detail. There's some info
+in Michael Barabanov's thesis which can be found at
+http://www.rtlinux.org/~baraban/thesis/

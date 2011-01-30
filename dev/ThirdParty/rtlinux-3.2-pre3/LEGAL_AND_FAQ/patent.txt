@@ -1,0 +1,187 @@
+
+                      THE OPEN RTLINUX PATENT LICENSE
+   
+   This License governs the royalty-free use of the process defined by
+   U.S. Patent No. 5,995,745. Anyone can license the use of the Patented
+   Process by agreeing to be bound by the terms of this License. Such
+   person is considered to be the Licensee ("Licensee"). The Patented
+   Process may be used, without any payment of a royalty, with two (2)
+   types of software. The first type is software that operates under the
+   terms of a GPL (as defined later in this License). The second type is
+   software operating under Finite State Machine Labs Open RTLinux (as
+   defined below). As long as the Licensee complies with the terms and
+   conditions of this License and, where applicable, with the terms of
+   the GPL, the Licensee may continue to use the Patented Process 
+   without paying a royalty for its use.
+   
+   You may use the Patented Process with software other than the two
+   types mentioned above but you must first obtain a separate license for
+   such use. The first step is to contact Finite State Machine Labs
+   (http://www.fsmlabs.com).
+   
+                                DEFINITIONS
+    1. "Patented Process" means the process covered by U.S. Patent No.
+       5,995,745, issued November 30, 1999 and entitled ADDING REAL-TIME
+       SUPPORT TO GENERAL PURPOSE OPERATING SYSTEMS .
+    2. "License" means this License in its entirety, also known as the
+       Open RTLinux Patent License.
+    3. "Licensor" means Victor Yodaiken, the inventor and owner of U.S.
+       Patent No. 5,995,745.
+    4. "You" means any person or entity that makes use of the Patented
+       Process or agrees to be bound by provisions of this License
+       ("Licensee").
+    5. "GPL" means The Free Software Foundation's General Public License
+       Version 2.
+    6. "Open RTLinux Software" means unmodified software labeled "Open
+       RTLinux code" by Finite State Machine Labs Inc. and:
+          + In the case of a binary distribution, the complete set of
+            executable programs, including linked files and any and all
+            other accompanying files, such as documentation;
+          + In the case of an installation for use, the complete set of
+            executable programs, any linked files, any attached files and
+            any and all other accompanying files, such as documentation;
+          + In the case of a source distribution, the complete set of
+            unmodified source files, and any and all documentation
+            included with the source code.
+    7. "Open RTLinux Execution Environment" means: A computer hardware
+       system where the interrupt control hardware of processors and
+       system boards is under the direct control of unmodified Open
+       RTLinux software in binary form. Configuration by a Licensee using
+       the configuration tools provided by Licensor is not considered a
+       modification unless such configuration includes a change to Open
+       RTLinux code that is not provided as an option through the
+       configuration tool.
+       
+    1. APPROVED USE
+       
+   In addition to the other terms and conditions of this License, use of
+   the Patented Process is permitted, without fee or royalty, when used:
+   
+   A. By software licensed under the GPL; or
+   
+   B. By software that executes within an Open RTLinux Execution Environment
+   - whether that software is licensed under the GPL or not.
+
+   2. YOUR OBLIGATIONS
+         1. Any use of the Patented Process must include labeling the
+            product or service that includes the Patented Process with
+            the following language: "Used, under license, U.S. Patent No.
+            5, 995,745."
+         2. A copy of these conditions and terms must be attached to or
+            included with any distribution of any product or service that
+            uses the Patented Process. It must be made clear to anyone
+            that uses your product or service that all subsequent uses
+            must also comply with the conditions and terms of this
+            License and (where appropriate) the GPL. Before you can
+            distribute any products or services that use the Patented
+            Process, you must require that the proposed subsequent user,
+            before incorporating the Patented Process into any subsequent
+            use, as opposed to merely reviewing and analyzing the
+            Patented Process, send an E-mail to license@fsmlabs.com and
+            acknowledge receipt of the Patented Process and agreement to
+            all License conditions and terms thereby becoming a Licensee.
+       
+   If you are using this Patented Process according to the conditions of
+   this License for GPL software and you are distributing or otherwise
+   making your software available outside your company then you must not
+   place any artificial impediments to free access to your software
+   source code. If you distribute your software or market your software
+   through some web site on the World-Wide-Web, you must make source code
+   for the software that makes use of the Patented Process immediately
+   available on this web site for all to access. Any subsequent use must
+   comply strictly with the terms of the GPL and with this License.
+   Failure to comply with the terms of the GPL will result in an
+   automatic termination of this License.
+   
+    1. Open RTLinux software is released under the GPL and you must
+       comply with the terms of the GPL where applicable. Any
+       modification of Open RTLinux code outside of the terms of the GPL
+       is considered a material breach of this license. Any modification
+       of Open RTLinux code results in code that is not "Open RTLinux
+       code" in the terms of this license and this code cannot be used
+       under the provisions of the section on Approved Use, subparagraph
+       (B) above.
+    2. Licensee and any subsequent user of the Patented Process through
+       Licensee's products or services will give notice of their full
+       name, address, telephone number, E-mail address and date of first
+       use or access to the Patented Process, whichever is earlier, to
+       Licensor by sending an E-mail to license@fsmlabs.com.
+    3. You will keep complete and accurate records of all commercial uses
+       of the Patented Process and all commercial distributions of the
+       Patented Process whether that distribution occurs directly or as
+       part of your products or services. You will also provide copies of
+       all such records upon request from Licensor
+    4. All notices, requests, demands, payment of invoices and other
+       communications shall be in writing and sent by facsimile,
+       nationally recognized overnight carrier, or certified mail,
+       postage prepaid, to:
+       
+                             Victor J. Yodaiken
+   
+                      Finite State Machine Labs, Inc.
+   
+                             914 Paisano Drive
+   
+                         Socorro, New Mexico 87801
+   
+    1. This Agreement is the entire agreement between the parties with
+       respect to this subject matter.
+    2. This Agreement shall be governed by the laws of the State of New
+       Mexico, without giving effect to principles of conflicts of law.
+       In addition, any action or proceeding arising from or relating to
+       this Agreement must be brought in a federal court in New Mexico.
+       Each party irrevocably submits to the jurisdiction of venue of any
+       such court.
+    3. Licensor shall have no liability for any indirect, incidental,
+       special, punitive or consequence of damages, including without
+       limitation, loss of profit or business opportunities, whether or
+       not advised of the possibility of such damages. Licensor expressly
+       disclaims any representations or warranties, expressed or implied,
+       regarding the product or services contemplated by this Agreement,
+       including any implied warranty of merchantability or fitness for a
+       particular purpose.
+       
+   
+   
+   TERMINATION AND LIMITATIONS
+    1. The term of this License will be limited by compliance of the
+       Licensee. If you do not comply with the conditions and terms of
+       this License, the License will be automatically terminated and all
+       use of the Patented Process must stop. This Agreement shall
+       commence as of the date this Agreement is executed by both parties
+       and shall remain in full force and effect until
+       Three-Hundred-and-Sixty-Five (365) calendar days from the date of
+       execution subject to prior termination as provided below.
+       Execution shall be deemed complete as of the moment the Licensee
+       acknowledges acceptance of all terms of this Agreement by clicking
+       on the "I agree" icon found on Licensor's web site
+       (http://www.fsmlabs.com) or by sending written confirmation of
+       acceptance by electronic mail to license@fsmlabs.com. Unless this
+       Agreement is terminated as provided below, this Agreement shall
+       automatically renew for periods of Three-Hundred-and-Sixty-Five
+       (365) calendar days each until the expiration of the U.S. Patent
+       on the Licensed Process.
+    2. The Licensor owns all right, title and interest to the patent. The
+       Licensor is not obligated to defend or indemnify any Licensee
+       against any suit, damage, claim or allegation of patent
+       infringement resulting from any use of the Patented Process. In
+       the event of any such occurrence, the Licensor will cooperate with
+       Licensee, at Licensee's expense.
+    3. The Licensor may terminate this License and end all uses of the
+       Patented Process if, for any reason, Licensor believes that the
+       Licensee is, or is about to become, bankrupt. In addition,
+       Licensor may terminate this License and end all uses of the
+       Patented Process if Licensee files a petition for bankruptcy or if
+       an involuntary petition for bankruptcy is filed against Licensee
+       during a bankruptcy proceeding.
+    4. The Licensor has the right to terminate this License or any
+       license between the parties if there is breach of any of these
+       conditions and terms and will give thirty (30) days' notice of
+       that termination by electronic mail ("E-mail") sent to the E-mail
+       address provided by the Licensee.
+    5. Licensee acknowledges that no other representations by Licensor
+       exist and that no other agreements exist between Licensee and
+       Licensor. This Agreement will be construed and interpreted
+       according to the laws of the State of New Mexico.
+       
+   - 4 -

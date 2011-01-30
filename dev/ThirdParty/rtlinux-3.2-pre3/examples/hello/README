@@ -1,0 +1,6 @@
+This is one of the simplest RTLinux programs.
+Type make test to run it. You have to be at a Linux console (no X)
+to see the results.
+
+the time stamps printed are the absolute time in ns from the start-time 
+taken in init_module 

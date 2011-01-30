@@ -1,0 +1,9 @@
+- /dev/ttySn should correspond not to the n'th entry in the table, but to the
+  n'th real serial port. We can implement rt_com_setserial that would set
+  parameters. Or we can use module parameters:
+    insmod rt_com com1=0x2f8,4
+  Only those ports listed on the command line would be requested.
+  (To my mind both have to be done, but the module parameter stuff should be
+  implemented right away, while rt_com_setserial can be done later - Jochen.)
+
+- POSIX tcgetattr/tcsetattr (non-canonical mode only).

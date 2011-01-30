@@ -1,0 +1,37 @@
+
+rtl_malloc(size) to allocate dynamik memory from a rt_thread.
+
+concept of operation:
+
+ rtl_alloc will eventually call kmalloc with GFP_ATOMIC - to do this without
+ blocking execution of rt-threads (even if its a high priority thread that 
+ requests memory) a tasklet that runs in linux kernel space is set up to 
+ actually do the allocation. 
+
+ a global pointer array for memory pointers is statically initiated in the
+ module (private to the module for now).
+ 
+ init module assignes NULL pointers to the entire array of pointers 
+
+ RT-Thread calls rtl_alloc passing it the size requsted
+ rtl_alloc will call the tasklet and suspend the rt-thread.
+ allocator_tasklet kmallocs the memory zerrors it and then signals 
+ RTL_SIGNAL_WACKUP to the suspended thread.
+ The RT-thread needs to check the return value of rtl_alloc to know if the 
+ memory allocation was successfull.
+
+ cleanup module frees the memory by calling kfree on each non-NULL pointer
+
+The implementation is only a prof of concept - the allocation strategy itselfe
+is unusable as there is no free/reuse of buffers posible and memory is blocked
+until rmmod is called. The allocation strategy though is up to the allocator
+tasklet as it is only getting the size and returning the index into the memory
+pointer list - so optimization and reuse can be put into the allocator tasklet.
+
+The rt_allocator.o module will now simply start a rt-thread and allocate
+increasing blocks of memory until the pointers are exhausted then loop on
+for ever failing on rtl_malloc , on rmmod the thread is terminated and 
+memory is freed.
+
+Note that kmalloc is limited to 128KB - if your request more you will get a 
+pointer to a 128K block - no warning.

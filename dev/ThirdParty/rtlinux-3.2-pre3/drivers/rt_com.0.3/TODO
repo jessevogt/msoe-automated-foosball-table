@@ -1,0 +1,8 @@
+- /dev/ttyS0 should correspond not to the first entry in the table,
+but to the real COM1. We can implement rt_com_setserial that
+would set parameters. Or we can use module parameters:
+insmod rt_com com1=0x2f8,4
+Only those ports listed on the command line would be requested
+
+- POSIX tcgetattr/tcsetattr (non-canonical mode only)
+

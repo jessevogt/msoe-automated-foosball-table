@@ -1,0 +1,86 @@
+.\"
+.\" Copyright (C) 1997 Jerry Epplin.  All rights reserved.
+.\"
+.\" Permission is granted to make and distribute verbatim copies of this
+.\" manual provided the copyright notice and this permission notice are
+.\" preserved on all copies.
+.\"
+.\" Permission is granted to copy and distribute modified versions of this
+.\" manual under the conditions for verbatim copying, provided that the
+.\" entire resulting derived work is distributed under the terms of a
+.\" permission notice identical to this one
+.\" 
+.\" The author assumes no responsibility for errors or omissions, or for
+.\" damages resulting from the use of the information contained herein.
+.\" 
+.\" Formatted or processed versions of this manual, if unaccompanied by
+.\" the source, must acknowledge the copyright and authors of this work.
+.\"
+.TH RT_IPC 2 "28 July 1997" "rt_ipc" "rt_ipc"
+.SH NAME
+rt_ipc \- IPC Primitives for Real-Time Linux
+.SH SYNOPSIS
+.nf
+.B #define MODULE
+.B #include <linux/module.h> 
+.B #include <linux/kernel.h> 
+.B #include <linux/version.h> 
+.B #include <linux/errno.h> 
+.B #include "rt_ipc.h"
+.fi
+.sp
+.BI "int rt_task_ipc_init(RT_TASK_IPC * " task ", void (*" fn ")(int " data "), int " data ", int " stack_size ", int " priority ");
+
+.BI "int rt_task_ipc_delete(RT_TASK_IPC * " task ");
+
+.BI "int rt_sem_init(rt_sem_t *" sem ", RT_SEMTYPE " type ", int " init_val ");
+
+.BI "int rt_sem_destroy(rt_sem_t *" sem ");
+
+.BI "int rt_sem_post(rt_sem_t *" sem ");
+
+.BI "int rt_sem_wait(rt_sem_t *" sem ");
+
+.BI "int rt_sem_trywait(rt_sem_t *" sem ");
+
+.BI "int rt_mq_init(rt_mq_t *" mq ", int " max_msgs ", int " msg_size ");
+
+.BI "int rt_mq_destroy(rt_mq_t *" mq ");
+
+.BI "int rt_mq_send(rt_mq_t *" mq ", char *" msg ", RT_MQ_PRIO " prio ", RTIME " wait ");
+
+.BI "int rt_mq_receive(rt_mq_t *" mq ", char *" msg ", RTIME " wait ");
+
+.BI "int rtf_ipc_create(unsigned int " fifo ", int " size ", int " rtl_to_linux ");
+
+.BI "int rtf_ipc_destroy(unsigned int " fifo ");
+
+.BI "int rtf_receive(unsigned int " fifo ", void *" buf ", int " count ", RTIME " timeout ");
+
+.BI "int rtf_send(unsigned int " fifo ", void *" buf ", int " count ", RTIME " timeout ");
+
+.SH DESCRIPTION
+
+.B rt_ipc
+provides facilities for communication and synchronization among Real-Time
+Linux tasks.  Semaphores (binary and counting) and message queues are
+provided.  Also provided are fifos for communication between Real-Time
+Linux tasks and Linux processes.  Timeouts are implemented in all primitives.
+.SH "AUTHOR"
+Jerry Epplin <JerryEpplin@worldnet.att.net>
+.SH "SEE ALSO"
+.BR rt_mq_destroy (2),
+.BR rt_mq_init (2),
+.BR rt_mq_receive (2),
+.BR rt_mq_send (2),
+.BR rt_sem_destroy (2), 
+.BR rt_sem_init (2), 
+.BR rt_sem_post (2), 
+.BR rt_sem_trywait (2), 
+.BR rt_sem_wait (2),
+.BR rt_task_ipc_delete (2), 
+.BR rt_task_ipc_init (2),
+.BR rtf_ipc_create (2), 
+.BR rtf_ipc_destroy (2), 
+.BR rtf_receive (2), 
+.BR rtf_send (2)

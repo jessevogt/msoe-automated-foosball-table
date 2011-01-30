@@ -1,0 +1,82 @@
+Credits: by Victor Yodaiken (updated by Nicholas Mc Guire>
+
+Nicholas McGuire <der.herr@hofr.at> is currently managing 
+releases of RTLinux/GPL. The staff of FSMLabs contributes 
+and also maintains the commercial version RTLinux Pro.
+
+Researchers at the University of Valencia in Spain and other
+members of the European Community OCERA project are now
+actively contributing to RTLinux/GPL. The Current development
+incorporated from the OCERA projects include:
+
+ * POSIX signals
+ * POSIX timers
+ * POSIX message queues
+ * POSIX bariers
+ * lwIP stack
+ * ..more still to be merged..
+
+special thanks to Jose Ismael Ripoll <ismael.ripoll@disca.upv.es> for 
+development, coordinative work and code review.
+
+For more information see www.ocera.org. 
+
+RTLinux was first developed by Michael Barabanov
+and myself. Many students at New Mexico Tech
+contributed to the early development. I 
+want to thank Oleg Subbotin, Ramesh Nalluri, Axel Bernal,
+Hua Mao, Bill Crum, but there must be others who I have
+forgotten. Please send me a note and pleae be respectful about
+age and memory. The project no longer exists at New Mexico Tech
+but is alive both commercially and in universities around the 
+world. What follows is an old list, please send us updated
+information. If you are maintaining some RTLinux code or 
+offering support, please write and we can put your name in 
+the final 3.2 release.
+
+Old Drivers.
+=-------------------------------------------
+The mbuff driver was contributed and maintained by Tomasz Motylewski
+<motyl@stan.chemie.unibas.ch>
+
+The rt_com serial driver is maintained by 
+- Jochen Kuepper <jochen@uni-duesseldorf.de>
+
+The idea of driving rtl_printf from a soft interupt
+is from David Schleef <ds@stm.lbl.gov>
+
+The original semaphores package is from Jerry Epplin
+(http://stereotaxis.wustl.edu/~jerry)
+
+Thanks to  all of the users of RTLinux for
+their comments, debugging help, and amazing applications. Particular
+thanks to:
+
+- Nils Hassler <nils@penai.de> maintaining PSC
+- Robert Kavaler (kavaler@innomedia.com) rtsock
+- Stephen D. Cohen <scohen@xybion.com>
+- Jerry Epplin (http://stereotaxis.wustl.edu/~jerry)
+- Andreas Franzen <anfra@debian.org>
+- Gabor Kiss <kissg@sztaki.hu>
+- Yunho Jeon <yunho@skylark.snu.ac.kr>
+- Zdenek Kabelac <kabi@informatics.muni.cz> 
+- Daniel Krippner <d.krippner@3s-software.com>
+- Jochen Kuepper <jochen@uni-duesseldorf.de>
+- Paolo Mantegazza <mantegazza@aero.polimi.it>
+- Jens Michaelsen <steenbeckdigital@compuserve.com>
+- Tomasz Motylewski <motyl@stan.chemie.unibas.ch>
+- Patrick Mourot <pm@sxb.bsf.alcatel.fr>
+- David Olofson <david.olofson@reologica.se>
+- Steve Rosenbluth <stever@la.creatureshop.henson.com>
+- Till Straumann <strauman@SLAC.Stanford.EDU>
+- Oystein Svendsen <svendsen@pvv.org>
+- Stuart Warren <SWarren@btr-auto.aust.com>
+- Phil Wilshire <philwil@earthlink.net>
+
+for their numerous contributions and valuable insights.
+(If we left you off by mistake, send a note to der.herr@hofr.at and
+ we apologize).
+
+Victor Yodaiken.
+
+(Update by Nicholas Mc Guire.)

@@ -1,0 +1,14 @@
+
+simple_device.c is actually not related to rtlinux at all - but as there are 
+questions about how to write a simple driver on the mailing list from time 
+to time a very simple driver is included here. It only provides 
+open/read/release and these do nothing but issue a printk (view with dmesg)
+
+to trigger the open/read/release load simple_driver.o and then run 
+./read_simple_driver folowed by  dmesg  to see the printk's .
+
+If you want to get a serious intro to writing linux device drivers and not 
+only how to missuse them as an interface to rt-threads check "Linux Device
+Drivers 2nd Edition" by Allessandro Rubini (publisher: O'Reilly)
+
+hofrat

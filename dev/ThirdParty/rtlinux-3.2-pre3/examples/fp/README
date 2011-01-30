@@ -1,0 +1,14 @@
+#include "../README"
+
+This example demonstrates the use of floating point operations in
+real-time processes.
+
+Note: you must link in the math library (-lm) if you use functions
+like sin() or cos() in your program (see the Makefile).
+
+To run this example you must first compile and boot the RT-kernel,
+then install the RT-scheduler module.
+This program is compiled into the Linux module rt_process.o.
+
+The program in fptest.c is meant to test the user mode FP operations
+while the RT system is running.

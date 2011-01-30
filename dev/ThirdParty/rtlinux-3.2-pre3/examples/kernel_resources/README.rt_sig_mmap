@@ -1,0 +1,19 @@
+
+rt_sig_mmap is a chardriver (MAJORD 17 - so check if this is not in use 
+or change it to something that will not conflict (cat /proc/devices...)!)
+
+The character driver is registered with the kernel and provides a mmap 
+function that mapps a kmalloc'ed buffer to the user-space on open - this
+way the user-space app can directly write to the kmalloc'ed buffer that 
+the rt-thread shares. The rt-thread is not periodic but is triggert by
+waking it when the driver is closed - this basically is unsafe as the 
+driver may be closed without having written anything to the buffer so
+the buffer is zero'ed after output in the rt-thread, furthermore any
+real driver may implement other functions and thus open/releas need 
+not indicate a mmap call, you can't though call the pthread_kill from
+mmap as the function does not wait until the user-space app actually
+wrote to the buffer.
+
+Alternatively one can initialize a semaphor and let the rt-thread wait on the
+semaphor, posting in driver_close to wake up the rt-thread.
+

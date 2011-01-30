@@ -1,0 +1,367 @@
+#This file was created by <jochen> Wed Jul 28 14:03:03 1999
+#LyX 1.0 (C) 1995-1999 Matthias Ettrich and the LyX Team
+\lyxformat 2.15
+\textclass linuxdoc
+\language english
+\inputencoding latin1
+\fontscheme default
+\graphics default
+\paperfontsize 12
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+\added_space_top vfill \added_space_bottom vfill 
+rt_com
+\layout Author
+
+Jochen Küpper
+\layout Date
+
+$Date: 2003/04/28 06:15:57 $
+\layout Section
+
+Device Driver Support
+\layout Standard
+
+$Id: rt_com.lyx,v 1.1.1.1 2003/04/28 06:15:57 hofrat Exp $
+\layout Subsection
+
+rt_com - serial port driver
+\layout Standard
+
+
+\emph on 
+author
+\emph default 
+: Jochen Küpper <jochen@uni-duesseldorf.de>
+\layout Standard
+\noindent 
+
+\emph on 
+last
+\emph default 
+ 
+\emph on 
+changed
+\emph default 
+: $Date: 2003/04/28 06:15:57 $
+\layout Standard
+
+This manual is intended to describe 
+\family typewriter 
+rt_com
+\family default 
+ version 0.3, but is not fully updated to match that version yet.
+ The interface should be right, though.
+\layout Subsubsection
+
+Introduction
+\layout Standard
+
+This chapter of the manual describes the 
+\family typewriter 
+rt_com
+\family default 
+ kernel module.
+ That module provides a reasonable easy software interface (driver) to the
+ standard serial ports of the PCs.
+ There are a small number of user functions that provide an interface to
+ the port, as well as several functions internally used to communicate with
+ the hardware.
+ 
+\layout Subsubsection
+
+Installation
+\layout Standard
+
+The rt_com package should contain the source code (
+\family typewriter 
+rt_com.h
+\family default 
+, 
+\family typewriter 
+rt_com.c
+\family default 
+, 
+\family typewriter 
+rt_comP.h
+\family default 
+), makefiles (
+\family typewriter 
+Makefile.am
+\family default 
+, 
+\family typewriter 
+Makefile.standalone
+\family default 
+), some informational files (
+\family typewriter 
+COPYING
+\family default 
+, 
+\family typewriter 
+License
+\family default 
+, 
+\family typewriter 
+README
+\family default 
+) and this documentation in various formats.
+ The master file is 
+\family typewriter 
+rt_com.lyx
+\family default 
+, there are also html and Postscript versions of it available.
+\layout Standard
+
+The module works with RT-Linux v1 and v2.
+ In order to run it on an v1 system (Linux kernel 2.0.x) you need to define
+ 
+\family typewriter 
+RTLINUX_V1
+\family default 
+ at compile time.
+\layout Subsubsection
+
+Interface functions
+\layout Paragraph
+
+Setting up a serial port
+\layout Standard
+
+This is to set up the port for use by your module by providing some initializati
+on data.
+ The function is declared as
+\layout Code
+
+void rt_com_setup( unsigned int com, unsigned baud, unsigned parity, unsigned
+ stopbits, unsigned wordlength)
+\layout Standard
+
+where com is the entry number from the
+\family typewriter 
+ rt_com_table
+\family default 
+ (see paragraph 
+\begin_inset LatexCommand \ref[rt_com_table]{rt_com_table}
+
+\end_inset 
+
+ ), baud is the Baud rate the port shall be operated at, parity determines
+ the parity policy to use (possible values are 
+\family typewriter 
+RT_COM_PARITY_EVEN
+\family default 
+, 
+\family typewriter 
+RT_COM_PARITY_NONE
+\family default 
+, 
+\family typewriter 
+RT_COM_PARITY_ODD
+\family default 
+ - these are defined in 
+\family typewriter 
+rt_com.h
+\family default 
+), stopbits and wordlength are self explanatory and take the immediate value
+ these flags shall be set at.
+\layout Paragraph
+
+Writing data to a port 
+\layout Standard
+
+To write data to a port you need to call the function
+\family typewriter 
+ rt_com_write
+\family default 
+, which is declared as
+\layout Code
+
+void rt_com_write( unsigned int com, char *buf, int cnt )
+\layout Standard
+
+where com is the entry number from the 
+\family typewriter 
+rt_com_table
+\family default 
+ (see paragraph 
+\begin_inset LatexCommand \ref[rt_com_table]{rt_com_table}
+
+\end_inset 
+
+ ), buf is the memory address of the data to write to the port, cnt is the
+ number of bytes that shall be written.
+\layout Paragraph
+
+Reading data from a port
+\layout Standard
+
+To read data from a port you need to call the function rt_com_read, which
+ is declared as
+\layout Code
+
+int rt_com_read( unsigned int com, char *buf, int cnt )
+\layout Standard
+
+where com is the entry number from the
+\family typewriter 
+ rt_com_table
+\family default 
+ (see paragraph 
+\begin_inset LatexCommand \ref[rt_com_table]{rt_com_table}
+
+\end_inset 
+
+ ), buf is the memory address the data read shall be put in, cnt is the
+ maximum number of bytes that shall be read.
+ The function returns the number of bytes that really have been read.
+\layout Subsubsection
+
+Internals
+\layout Paragraph
+
+Loading the module into memory
+\begin_inset LatexCommand \label{init_module}
+
+\end_inset 
+
+
+\layout Standard
+
+When the module gets loaded it requests the port memory and registers the
+ interrupt service routine (ISR) for each member of the rt_com_table (see
+ paragraph 
+\begin_inset LatexCommand \ref[rt_com_table]{rt_com_table}
+
+\end_inset 
+
+).
+ Moreover it initializes all ports.
+\layout Standard
+
+On success it reports the loading of the module, otherwise it releases all
+ resources, reports the failure and exits without the module beeing loaded.
+ 
+\layout Paragraph
+
+Removing the module
+\layout Standard
+
+Before the module is removed from memory, the function cleanup_module frees
+ all allocated resources.
+\layout Subsubsection
+
+Data Structures
+\layout Paragraph
+
+rt_buf_struct
+\begin_inset LatexCommand \label{rt_buf_struct}
+
+\end_inset 
+
+
+\layout Standard
+
+Structure to implement software FIFOs.
+ Used for buffering of the data that needs to be written to the port and
+ data read from hardware that needs to be read by the user.
+ The FIFO size is given by the define 
+\family typewriter 
+RT_COM_BUF_SIZ
+\family default 
+; it has to be a power of two.
+\layout Paragraph
+
+rt_com_struct
+\layout Standard
+
+Defines the hardware parameter of one serial port.
+ The members of this structure are a magic number (not used yet), the base
+ rate of the port (115200 for standard ports), the port number, the interrupt
+ number (IRQ) of the port, the flags set for this port, the ISR (see paragraph
+ 
+\begin_inset LatexCommand \ref[init_module]{init_module}
+
+\end_inset 
+
+) the type and a copy of the IER register.
+ Moreover it contains two FIFOs as defined by the 
+\family typewriter 
+rt_buf_struc
+\family default 
+ (see paragraph 
+\begin_inset LatexCommand \ref[rt_buf_struct]{rt_buf_struct}
+
+\end_inset 
+
+), one for reading from the port and one for writing to it, respectively.
+\layout Paragraph
+
+rt_com_table
+\begin_inset LatexCommand \label{rt_com_table}
+
+\end_inset 
+
+
+\layout Standard
+
+This array holds a rt_com_struct for each serial port to be handled by the
+ module.
+\layout Subsubsection
+
+Availability
+\layout Standard
+
+The package is available at the 
+\begin_inset LatexCommand \url[rt_com homepage]{http://www-public.rz.uni-duesseldorf.de/~jochen/computer/software/rt_com/}
+
+\end_inset 
+
+ and the 
+\begin_inset LatexCommand \url[RT-Linux homepage]{http://www.rtlinux.org}
+
+\end_inset 
+
+.
+\layout Subsubsection
+
+Bugs
+\layout Standard
+
+Please report bugs to 
+\begin_inset LatexCommand \url[Jochen Küpper]{mailto:jochen@uni-duesseldorf.de}
+
+\end_inset 
+
+ and the 
+\begin_inset LatexCommand \url[RT-Linux maiing list]{mailto:rtl@rtlinux.cs.nmt.edu}
+
+\end_inset 
+
+.
+\layout Standard
+
+There are no known bugs right now.
+ 
+\layout Subsubsection
+
+Acknowledgment
+\layout Standard
+
+Thanks to Jens Michaelsen for providing his code.
+\the_end

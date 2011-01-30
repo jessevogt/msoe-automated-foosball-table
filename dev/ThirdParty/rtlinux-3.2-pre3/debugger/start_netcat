@@ -1,0 +1,2 @@
+#!/bin/sh
+nc -l -p 5000 >/dev/rtf10 </dev/rtf10 &

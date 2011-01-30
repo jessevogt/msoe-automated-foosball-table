@@ -1,0 +1,10 @@
+rmmod creator
+rmmod writer-1
+rmmod writer-2
+rmmod writer-3
+rmmod writer-4
+rmmod reader-1
+rmmod reader-2
+rmmod reader-3
+rmmod reader-4
+rmmod rtl_mqueue

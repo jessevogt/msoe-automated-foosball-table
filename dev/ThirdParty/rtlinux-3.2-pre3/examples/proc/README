@@ -1,0 +1,64 @@
+
+Some simple examples using the proc filesystem to access rt-resources
+
+simple_proc.o:
+==============
+
+set up a /proc/hrtime file that returns the value of gethrtime when you call
+cat /proc/hrtime
+
+proc_start_stop.o:
+==================
+
+this is a sligtly modified hello.o that will report its runntime status in 
+/proc/thread_status - and allow modifying the running variable via the 
+/proc entry.
+
+rtl11:~ # insmod proc_start_stop.o
+rtl11:~ # cat /proc/thread_status
+Thread State:1
+rtl11:~ # echo 0 > /proc/thread_status
+rtl11:~ # cat /proc/thread_status
+Thread State:0
+
+dmesg should show you that the rt-thread has terminated.
+
+sysctl.o:
+=========
+
+example of using the sysctl functions to build a proc interface below 
+/proc/sys/ the files are located in /proc/sys/dev/simple
+
+info: contains some string to be printed - could print any kernel variable
+debug: read/write access to an int to turn on/off debuging or thread or...
+
+rtl11:~ # insmod sysctl.o
+rtl11:~ # cat /proc/sys/dev/simple/info
+Some infos via sysctl
+rtl11:~ # cat /proc/sys/dev/simple/debug
+0
+rtl11:~ # echo 2 > /proc/sys/dev/simple/debug
+rtl11:~ # cat /proc/sys/dev/simple/debug
+1
+
+sysctl_start_stop.o:
+====================
+
+same as proc_start_stop.o just using sysctl interface
+
+rtl11:~ # insmod sysctl_start_stop.o
+rtl11:~ # cat /proc/sys/dev/simple/info
+RT-thread done with loop 10
+rtl11:~ # cat /proc/sys/dev/simple/status
+1
+rtl11:~ # echo 0 > /proc/sys/dev/simple/status
+rtl11:~ # dmesg
+elapsed_time = 60500028544
+elapsed_time = 61000028768
+elapsed_time = 61500028960
+Terminating thread - setting status to 0
+elapsed_time = 62000029568
+rtl11:~ # cat /proc/sys/dev/simple/info
+RT-thread done with loop 48
+
+

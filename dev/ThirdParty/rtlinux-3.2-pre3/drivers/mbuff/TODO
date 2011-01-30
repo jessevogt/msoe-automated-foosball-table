@@ -1,0 +1,17 @@
+More testing. All combinations of CPU flags, RT, non-RT, SMP, non-SMP, 2.2, 2.3
+kernels.
+
+Problem of fork(). If a process mmaps mbuff and then forks bad things happen.
+
+Problem of deallocating mbuffs still having files pointing to them (selected)
+-delayed until 0.7 -still not done.
+
+See what kiobuf in 2.3 is.
+
+Implement sizing up (or down - much harder) already allocated mbuff.
+Will be done if someone asks and gives me 1-2 weeks.
+
+Make /proc/mbuff optional (possibly separate module).
+Write a nice mbuff listing and configuration tool (PERL?).
+
+Any other wishes?

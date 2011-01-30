@@ -1,0 +1,21 @@
+Two kinds of stress tests:
+
+	1) Several threads sending and receiving on the same message
+	queue
+	
+	2) Several threads sending and receiving on differents message
+	queues
+
+The first kind has the limitation of sempahores performance, since
+this is the mechanism used for synchronization. Mutual exclusion is
+obtained using a semaphore by message queue, so two distincts threads
+sending to distincts message queues are not in conflict.
+
+16/4/2003
+
+Stress Tests with several writers and one reader on the same message
+queue show RTLinux behaviour is not "normal" but is right. If there
+are not free slots in the message queue, semaphores functionality can
+give the free slot always to the same thread. If you want to see it,
+use run_tests script with creator.o writer-1.o and reader-1.o
+

@@ -1,0 +1,129 @@
+The main purpose of this character device driver  is to ilustrate how to 
+share big blocks of memory between kernel and user space. It is based
+on Alan Cox's advice to look for the "heavy wizardry" in bttv.c driver.
+
+I have added some locking (mbuff pointer) and deallocation support. 
+
+Licenced to all under GPL.
+
+--
+Tomasz Motylewski, 24.03.1999
+<motyl@stan.chemie.unibas.ch>
+
+v0.2 27.03.1999
+Code split to kvmem.h and kvmem.c
+Tester checks whether pages were really unmapped - dumps core (OK, it should).
+The module should allow for multiple maps. The first mmap allocates memory.
+
+v0.3 24.04.1999
+Cleaned up a bit. Does not do automatic allocation on mmap().
+API: (warning - changed in v0.6 - see init_module and mbuff.h)
+  in the kernel:
+    extern int shm_allocate(unsigned int size, void **shm);
+    extern int shm_deallocate(void * shm);
+    example:
+      struct myshm *shm;
+      shm_allocate(1024*1024*32,(void **) &shm);
+      at this point you can mmap it from user program (see tester.c).
+      shm->a =20; use it any way;
+      shm_deallocate(shm); /* the memory will be freed after the last unmap 
+                              by the user */
+  user space: see tester.c example.
+  access through misc device (enable MISC in the kernel):
+crw-r--r--   1 root     root      10, 254 Apr 24 14:19 rtl_shm
+
+v0.4 31.05.1999
+"make test" works again, officially released on 
+http://crds.chemie.unibas.ch/PCI-MIO-E/
+
+  IMPORTANT: comment out "-DSHM_DEMO" from Makefile if you want to use 
+             shm_allocate in your code. You may also wish to remove some funny
+             debug messages.
+      
+v0.5 07.07.1999
+Ported to 2.2 kernel while preserving compatibility with 2.0. Thanks to David
+Schleef.
+
+v0.5-ds 09.07.1999 [ds]
+Had a lot of fun hacking around and such.  Added support for multiple
+mbuff areas, (de)allocation from user or kernel space.  Multiple areas
+are referenced via a name that is specified when the area is created.
+Probably managed to break it big time. [O, yeah... (tm)]
+
+v0.6pre1 11.07.1999 <TM>
+Lots of fun as well, but mutiple vma on a single mbuff was a paAaAaAaAaiN !
+Seems to work on "default" mbuff (selected on open). ioctls still not
+implemented.
+
+v0.6pre4 
+seems to work quite well, "make test" tries strange things and does not crash
+rtl_nfifo.c does not compile yet.
+For the new "multiple named areas" API see tester.c and the source code (shm_allocate).
+
+v0.6pre4-rtl 27.08.1999 
+integrated into RT-Linux v2beta14
+reworked by <TM> to actually compile and perform "make test" correctly. 
+Warning ! Do not deallocate areas more times then you have allocated them -
+- one bug fix still to come.
+Not tested with 2.0 kernel.
+mbuff in rtl_nfifo defaults to RT-FIFO-00X for /dev/rtfX.
+v0.6pre5-rtl 27.08.1999
+Implemented checking for still mmaped pages before freeing memory.
+
+v0.6pre6 22.09.1999
+Decoupled from RTL for standalone compilation. See lines marked ##RT 
+in Makefileif you want it in RTL. Should be not possible to crash by 
+any combination of allocate/mmap/dealocate in any order.
+User space inline functions mbuff_alloc and mbuff_free added to mbuff.h
+
+v0.6pre7 02.10.1999
+Fixed mbuff_alloc and mbuff_free functions in mbuff.h. They are now 
+the recommended method to use shared memory from user space.
+Cleaned up debugging code. Tested OK.
+
+v0.6 12.10.1999
+Added mbuff_attach and mbuff_detach.
+Written a short MANUAL.
+
+v0.6.1 12.10.1999
+Michael Barabanov pointed to inconsistent behaviour of DEALLOC ioctl - fixed.
+Changes to Makefile - also from Michael.
+Peter Wurmsdobler pointed to is_rtidle - removed.
+
+v0.6.2 13.10.1999
+Changed volatile char * to void * for mbuff_* functions.
+
+v0.6.3 01.12.1999
+Added -I/usr/src/linux/include and autodetection of __SMP__ to Makefile - this
+should fix compile problems.
+David Edwards <david-alh@excite.com> added /proc/mbuff/ support and fixed
+few other compile problems (thanks!).
+
+v0.6.4	02.12.1999
+Exported  mbuff_list_lookup_name() and mbuff_list_lookup_buf();
+
+v0.6.5 15.02.2000
+Added extern "C" { wrapper around mbuff.h for C++ compilers.
+Added mbuff_alloc_at and mbuff_attach_at (idea by Phil Wilshire 
+<philwil@on-ramp.ior.com>)
+Files moved: README->CHANGES, MANUAL->README
+
+v0.7.0 01.04.2000
+Experimental release.
+Merged new version of the bttv.c code by David Miller (kvmem.h)
+Merged changes from kernel_compat.h from comedi-0.7.39
+Ported to 2.3 (code stolen from comedi).
+Tested with 2.0.38, 2.2.15pre9, 2.2.15pre16, 2.3.47, 2.3.99pre3
+
+v0.7.1 06.04.2000
+Same fixes as 0.6.6:
+Fixed _cplusplus to __cplusplus.
+Added check file->private_data != NULL on mbuff_close.
+Explanation of usage count in FAQ.
+Moved #include's earlier in mbuff.h.
+
+v0.7.2 04.06.2000
+Same fixes as 0.6.7:
+Changed VERSION to MBUFF_VERSION
+Added open_cnt++ in 2 places.
+CONFIG_RTL autodetection in Makefile.

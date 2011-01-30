@@ -1,0 +1,16 @@
+
+rt_kthread is an example of sharing address space between a kernel thread
+a character driver and a rt-thread. 
+
+Operation:
+
+On insmod a character device is registered that allows reading of a message
+containing the current value of a global variable with the ./read_rt_kthread
+at the same time this value is printed in the kthread and in the rt_thread.
+The kthread will loop in its inner loop for 60 times and then terminate, 
+to terminate the kethread while it is still active, send it any signal (to 
+find the pid of the kthread do  ps auxw  and it should show the rt_kthread 
+close to the end of the output). If the kethread received a signal while it
+was active it resets the global int myint_for_something to 0 and then exits.
+
+hofrat

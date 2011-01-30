@@ -1,0 +1,77 @@
+.\"
+.\" Copyright (C) 1997 Jerry Epplin.  All rights reserved.
+.\"
+.\" Permission is granted to make and distribute verbatim copies of this
+.\" manual provided the copyright notice and this permission notice are
+.\" preserved on all copies.
+.\"
+.\" Permission is granted to copy and distribute modified versions of this
+.\" manual under the conditions for verbatim copying, provided that the
+.\" entire resulting derived work is distributed under the terms of a
+.\" permission notice identical to this one
+.\" 
+.\" The author assumes no responsibility for errors or omissions, or for
+.\" damages resulting from the use of the information contained herein.
+.\" 
+.\" Formatted or processed versions of this manual, if unaccompanied by
+.\" the source, must acknowledge the copyright and authors of this work.
+.\"
+.TH RTF_IPC_CREATE 2 "15 August 1997" "rt_ipc" "rt_ipc"
+.SH NAME
+rtf_ipc_create \- create a real-time fifo
+.SH SYNOPSIS
+.nf
+.B #define MODULE
+.B #include <linux/module.h> 
+.B #include <linux/kernel.h> 
+.B #include <linux/version.h> 
+.B #include <linux/errno.h> 
+.B #include <linux/rtf.h> 
+.B #include "rt_ipc.h"
+.fi
+.sp
+.BI "int rtf_ipc_create(unsigned int " fifo ", int " size ", int " rtl_to_linux ");
+.SH DESCRIPTION
+.B rtf_ipc_create
+creates a real-time fifo (RT-FIFO) of size
+.I size
+and assigns it the identifier
+.IR fifo .
+.I fifo
+is a value unique within the system, and must be less than IPC_RTF_NO.
+If 
+.I rtl_to_linux
+is 1, the fifo is used for transferring data from RT-Linux tasks to a Linux
+process.  If
+.I rtl_to_linux
+is 0, the fifo is used for transferring data from a Linux process to
+one or more RT-Linux tasks.
+.PP
+The rt_ipc RT-FIFO is a mechanism, implemented as a character device, to
+communicate between real-time tasks and ordinary Linux processes.  It is
+based on the Real-Time Linux RT-FIFO mechanism.  The
+rtf_* functions are used by the real-time tasks; Linux processes use
+standard character device access functions such as
+.BR read(2) ,
+.BR write(2) ,
+and
+.BR select(2) .
+.SH "RETURN VALUE"
+On success, 0 is returned.  On failure, a negative value is returned
+as described below.
+.SH ERRORS
+.IP \fB-ENODEV\fP
+.I fifo
+is not less than IPC_RTF_NO and RTF_NO.
+.IP \fB-EBUSY\fP
+.I fifo
+is already in use.  Choose a different ID.
+.IP \fB-ENOMEM\fP
+.I size
+bytes could not be allocated for the RT-FIFO.
+.SH "AUTHOR"
+Jerry Epplin <JerryEpplin@worldnet.att.net>
+.SH "SEE ALSO"
+.BR rtf_ipc_destroy (2), 
+.BR rtf_receive (2), 
+.BR rtf_send (2)

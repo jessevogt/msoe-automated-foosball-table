@@ -1,0 +1,33 @@
+
+A very simple kthread example - a very dangorouse kthread example.
+
+The kernel thread is only invoced to call execve and thats it - as it inherits
+the environment of the user that launched the insmod ktherd1.o (you) the echo
+goes to the this users console. basically this is nothing else than the 
+kthread equivalent of the fairly useless userspace uthread1 (well its not a
+thread but...).
+
+---uthread1.c---
+#include <unistd.h>
+	
+char cmd_path[256] = "/bin/echo";
+char main_arg[] ="Hello User World";
+
+main(){
+	static char * envp[] = { "HOME=/root", 
+		"TERM=linux", 
+		"PATH=/bin", 
+		NULL };
+	char *argv[] = { 
+		cmd_path,
+		main_arg,
+		NULL };
+	int ret;
+
+	printf("calling execve for %s \n",cmd_path); 
+	ret = execve(cmd_path, argv, envp);
+
+	/* if we ever get here - execve failed */
+	printf("failed to exec %s, ret = %d\n", cmd_path,ret);
+	return -1;
+}

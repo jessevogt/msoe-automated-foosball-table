@@ -1,0 +1,64 @@
+
+Here you will find the rationale beyond the use of GPL license in this
+lwIP porting instead of the BSD-license which is used in lwIP code.
+
+We think that releasing the RTL-lwIP project under the BSD license do
+not protect the freedom of the author. The BSD license allows any
+company to get the code and sell it with nothing in return to the
+community.
+
+The GPL prevents a malicious company of making money selling the
+"effort" (code, design, etc.)  of other people. Getting for free
+(gratis) the code (work) of other people and selling it for a fee. The
+GPL gives to the developer the protection against this not desirable
+situation.
+
+On the other hand, GPL code can be used by companies with not problem
+at all.  If the GPL code states clearly the boundaries of the GPL code
+(please, see the http://www.gnu.org/licenses/gpl-faq.html), a company
+can use (link) the GPL code and sell ITS PRODUCT in a closed way. All
+the development done by that company (its home made code) is
+absolutely under the control (distribution policy, licensing, patents,
+etc.) of the company. But if the company improves GPL code then the
+code belongs to the community which created it, and should be returned
+to the community.
+
+Most of the code of this porting is verbatim copied from the original
+lwIP code, which is BSD licensed. But the contributed code of this
+project (RT-Linux porting) is covered by the GPL license, with the
+explicit exception that code that links (using the lwIP API) with this
+porting do not need to be GPL.
+
+--- GPL exception ----
+Linking RTL-lwIP statically or dynamically with other modules is
+making a combined work based on RTL-lwIP.  Thus, the terms and
+conditions of the GNU General Public License cover the whole
+combination.
+
+As a special exception, the copyright holders of RTL-lwIP (*) give you
+permission to link RTL-lwIP with independent modules that communicate
+with RTL-lwIP solely through the interfaces, regardless of the license
+terms of these independent modules, and to copy and distribute the
+resulting combined work under terms of your choice, provided that
+every copy of the combined work is accompanied by a complete copy of
+the source code of RTL-lwIP (the version of RTL-lwIP used to produce
+the combined work), being distributed under the terms of the GNU
+General Public License plus this exception.  An independent module is
+a module which is not derived from or based on RTL-lwIP.
+
+Note that people who make modified versions of RTL-lwIP	are not
+obligated to grant this special exception for their modified versions;
+it is their choice whether to do so.  The GNU General Public License
+gives permission to release a modified version without this exception;
+this exception also makes it possible to release a modified version
+which carries forward this exception.
+------
+
+Take in mind that RTL-lwIP is GPL code although it includes BSD
+code. So using RTL-lwIP force users to comply with the GPL
+requirements. Please, read the file GPL.license in this directory.
+
+
+* This porting was supported under Spanish grant
+TIC2002-04123-C03-03: SISTEMAS DE TIEMPO REAL EMPOTRADOS, FIABLES Y
+DISTRIBUIDOS BASADOS EN COMPONENTES.

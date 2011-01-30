@@ -1,0 +1,22 @@
+
+LICENSING INFORMATION IS IN THE DIRECTORY LEGAL_AND_FAQ. PLEASE
+READ THIS BEFORE USING ANY OF THE RTLINUX DISTRIBUTION.
+
+RTLinux is a hard real-time kernel that runs  Linux as its idle thread.
+More information can be found at http://www.rtlinux-gpl.org/
+and http://www.fsmlabs.com/
+
+Installation instructions can be found in doc/INSTALLATION.
+A quick introduction to RTLinux, some installation instructions
+and a short tutorial on writing own modules can be found here:
+www.tldp.org/HOWTO/RTLinux-HOWTO
+
+If you are upgrading from previous versions of RTLinux, please read the
+file doc/upgrading.txt.
+
+For commercial support email support@fsmlabs.com
+For free support try the mailing list: rtl@rtlinux.org. People on the
+list are very helpful, if you are nice to them.
+
+Finite State Machine Labs Inc. (FSMLabs) created and maintains
+RTLinux.

@@ -1,0 +1,5 @@
+
+mmap_user1 mmaps the kmalloc'ed memory from simple-device and allows writing
+to this memory - to read it use mmap_user2.
+
+hofrat

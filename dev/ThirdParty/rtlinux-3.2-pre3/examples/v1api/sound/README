@@ -1,0 +1,18 @@
+/* #include "../../README" */
+
+This example demonstrates interrupt handling in real time.
+
+You will also find out how to pronounce "Linux" correctly! Since I'm
+not sure that everyone will be able to make out the words, here they are:
+"Hello, this is Linus Torvalds. I'd like to pronounce `Linux': that's Linux!"
+I took this file from http://www.ssc.com/lj/images/english.au .
+
+The real-time process sets up the real-time clock (aka CMOS-clock) to generate
+interrupts at 8192 Hz rate. On each interrupt it tries to get a sample from the
+RT-FIFO number 0. If successful, it transforms the sample from 8bit ulaw
+encoding to 1-bit sample and turns the speaker on or off accordingly.  This
+takes advantage of the fact that .au files are typically sampled at 8kHz.
+
+The sound quality is pretty low. 1-bit sampling is clearly not enough.
+
+To run the example type `make; make test;'

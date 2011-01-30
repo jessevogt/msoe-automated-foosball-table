@@ -1,0 +1,42 @@
+RTLinux/Open 3.2 is now available from: ftp://ftp.rtlinux.com/pub/rtlinux/v3/
+
+New in 3.2
+
+
+   * sem_getvalue() fixed (thanks to David Hamilton <David.Hamilton@jet.uk>)
+   * updated documentation
+   * simplified remote debugging
+
+
+
+Old announcements:
+
+
+RTLinux/Open 3.1 is now available from: ftp://ftp.rtlinux.com/pub/rtlinux/v3/
+
+New in 3.1
+
+    * Both v2.4.4 and v2.2.19 kernels are supported
+    * RTLinux modules are compiled correctly when module versioning is enabled
+    * POSIX support fixes and enhancements
+    * RT-threads can be created from other RT-threads with preallocated memory
+    * Compatibility mode fixes (rt_get_time and others)
+    * CLOCK_GPOS is a new POSIX clock that converges to the Linux system clock
+    * The interrupt focus feature is also supported with 2.2.x kernels
+    * CLOCK_REALTIME is now the same as CLOCK_RTL_SCHED
+    * The new rtl_posixio RTF_SETSIZE ioctl can be used to change the fifo size
+
+Note on POSIX clocks. There are 3 clocks available to the RTLinux programs:
+
+- CLOCK_MONOTONIC. This essentially a scaled CPU cycle counter. It expresses
+time passed since system bootup. The main use 
+
+- CLOCK_REALTIME. This is the clock used for thread scheduling. sem_timedwait,
+nanosleep, pthread_make_periodic_np and others use time values relative to
+this clock. In oneshot (default) mode, time shown by this clock is the same
+as that of CLOCK_MONOTONIC. In periodic mode, CLOCK_REALTIME becomes local
+to the CPU.
+
+- CLOCK_GPOS. This clock always converges to the Linux system clock and thus
+is subject to ntpd adjustments etc.
+

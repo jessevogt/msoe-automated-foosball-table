@@ -1,0 +1,23 @@
+#!/bin/sh
+
+ROOT_RTLDOC_DIR=rtldoc/docs
+
+# use: scripts/rtldoc rtlinux_dir_to_install
+
+if [ ! -d "$1" ]; then
+	echo usage: scripts/rtldoc directory
+	exit 1
+fi
+
+HERE=`pwd`;
+cd rtldoc || exit 1
+bk -r get -S; make
+cd $HERE
+rm -rf $1/doc/html $1/man
+cp -fr ${ROOT_RTLDOC_DIR}/html $1/doc
+cp -fr ${ROOT_RTLDOC_DIR}/man $1
+cp -fr ${ROOT_RTLDOC_DIR}/COPYRIGHT $1/man
+cp -fr ${ROOT_RTLDOC_DIR}/COPYRIGHT $1/doc
+cp -fr ${ROOT_RTLDOC_DIR}/txt/FAQ.txt $1
+cp -fr ${ROOT_RTLDOC_DIR}/txt/GettingStarted.txt $1
+

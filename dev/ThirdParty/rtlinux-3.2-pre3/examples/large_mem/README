@@ -1,0 +1,34 @@
+
+larg_mem.o:
+=============
+
+Example of allocating large amounts of memory at boot time - to use this 
+you must edit the larg_mem.c program and adjust memstart memend to the values
+you pass to the kernel in the mem= line and the physical memory installed
+the defaults in the example here assumes that you passed 
+
+mem=96M
+
+at the kernel boot prompt and have 128MB installed, giving you 32MB that 
+you can use for RTLinux.
+
+On a 128MB box with mem=96  cat /proc/meminfo  should show something like
+
+        total:    used:    free:  shared: buffers:  cached:
+Mem:  97411072 90025984  7385088        0 10190848 58822656
+
+
+All this example will do (whith the default settings) is fill up these 32MB 
+with the index of the (unsigned long) large location . 
+
+Module options:
+
+    memstart=BYTE_OFFSET physical address at which reserved memory starts
+    memlength=BYTES      length of memory block to reserve
+    period=MICROSECONDS  period of the main loop
+
+
+larg_stack.o:
+=============
+
+ Example of setting up a large stack (default is 20k) by kmalloc'ing a larger chunk and assigning it to the thread via the attribute structure.

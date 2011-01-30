@@ -1,0 +1,2 @@
+CONFIG_RTL_USE_V1_API option must be enabled
+in order for these examples to work.

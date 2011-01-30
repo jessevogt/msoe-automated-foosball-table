@@ -1,0 +1,20 @@
+INTRODUCTION
+This example installs a HTTP daemon in RTLinux.
+
+EXECUTION
+From the $(RTL_LWIP_SOURCES) directory run 
+>make httpd
+
+Then install the RTL-lwIP TCP/IP stack, and then run:
+> insmod httpd.o
+
+That's all. From other machine open a browser (such as mozilla) and type:
+
+http://$(IP_ASSIGNED)/index.html
+
+Enjoy yourself.
+
+
+Visit the RTL-lwIP web page:
+
+http://canals.disca.upv.es/~serpeal/RTL-lwIP/htmlFiles/index.html

@@ -1,0 +1,12 @@
+
+#define LPT 0x378
+#define LPT_CNTRL LPT+2 
+#define LPT_IRQ 7
+#define RTC_IRQ 8
+
+#include <rtl_time.h>
+
+struct sample {
+	hrtime_t min;
+	hrtime_t max;
+};

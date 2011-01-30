@@ -1,0 +1,50 @@
+/*
+ * Copyright (C) 1997 by the University of Kansas Center for Research,
+ * Inc.  This software was developed by the Information and
+ * Telecommunication Technology Center (ITTC) at the University of
+ * Kansas.  Partial funding for this project was provided by Sprint. This
+ * software may be used and distributed according to the terms of the GNU
+ * Public License, incorporated herein by reference.  Neither ITTC nor
+ * Sprint accept any liability whatsoever for this product.
+ *
+ * This project was developed under the direction of Dr. Douglas Niehaus.
+ *
+ * Authors: Shyam Pather, Balaji Srinivasan
+ *
+ * Please send bug-reports/suggestions/comments to posix@ittc.ukans.edu
+ *
+ * Further details about this project can be obtained at
+ *    http://hegel.ittc.ukans.edu/projects/posix/
+ */          
+
+  Addapted by J. Vidal <jvidal@disca.upv.es> to RTLinux 10-12-02.  
+******************************************************************
+
+TEST: 2timers.c
+ * This program demonstrates the use of POSIX.4 interval timers without 
+ * queued signals. It simply creates a POSIX.4 interval timer that sends
+ * a normal signal when it expires. The handler for this signal prints
+ * a message, and increments a count. When the count reaches MAX_EXPIRATIONS,
+ * the timer is deleted, and the program exits. 
+	 * Set up the signal event that will occur when the timer 
+	 * expires. 
+	 * Create and set the timer.
+	 * Delete the timer.
+	 * Initialize the timer setting structure.
+	 * Set up and install a signal handler for the signal that 
+	 * the timer will send. 
+	 * Busy wait until the timer expires MAX_EXPIRATIONS number 
+	 * of times.
+
+******************************************************************
+
+TEST: timers.c
+	 * Test to see if timer goes off immediately if not a future time is
+	 * provided with TIMER_ABSTIME 
+	 * test to check timer cancellation by deletion
+         * Test to see if timer goes off immediately if not a future time is
+         * provided with TIMER_ABSTIME
+
+******************************************************************
+
+

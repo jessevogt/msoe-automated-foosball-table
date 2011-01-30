@@ -1,0 +1,16 @@
+#!/bin/sh
+
+insmod modules/rtl.o
+insmod modules/rtl_time.o
+if [ -f modules/rtl_posixio.o ]; then
+	insmod modules/rtl_posixio.o
+fi
+insmod modules/rtl_fifo.o
+insmod modules/rtl_sched.o
+if [ -f modules/psc.o ]; then
+	insmod modules/psc.o
+fi
+if [ -f modules/rtl_mqueue.o ]; then
+	insmod modules/rtl_mqueue.o
+fi
+exit 0

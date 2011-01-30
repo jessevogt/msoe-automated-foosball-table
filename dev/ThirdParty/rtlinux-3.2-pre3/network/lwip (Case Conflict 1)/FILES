@@ -1,0 +1,13 @@
+In the $(RTL_LWIP_SOURCES)/src directory you'll find the RTL-lwIP sources.
+
+In the $(RTL_LWIP_SOURCES)/examples directory you'll find some compilable examples
+using RTL-lwIP.
+
+In the $(RTL_LWIP_SOURCES)/unix directory you'll find some Linux applications that
+help to test the examples included for RTL-lwIP (such as the tcpserver.o module).
+
+In the $(RTL_LWIP_SOURCES)/Documentation directory you'll find documentation about
+how to write RT-Linux applications using RTL-lwIP.
+
+In the $(RTL_LWIP_SOURCES)/ares-1.1.1-lwip directory you'll find source files of
+the Asynchronous DNS client ported to lwIP by March Boucher.

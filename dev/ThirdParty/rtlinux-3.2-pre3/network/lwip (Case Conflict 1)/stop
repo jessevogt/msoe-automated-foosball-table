@@ -1,0 +1,3 @@
+rmmod rtl_debug
+rtlinux stop
+lsmod

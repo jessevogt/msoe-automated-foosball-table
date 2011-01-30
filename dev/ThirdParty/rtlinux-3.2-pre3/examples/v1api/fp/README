@@ -1,0 +1,12 @@
+#include "../README"
+
+This example demonstrates the use of floating point operations in
+real-time processes.
+
+To run this example you must first compile and boot the RT-kernel,
+then install the RTLinux modules (type from the directory where you
+compiled RTL: sh scripts/insrtl
+
+
+The program in fptest.c is meant to test the user mode FP operations
+while the RT system is running.

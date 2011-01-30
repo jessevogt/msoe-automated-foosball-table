@@ -1,0 +1,25 @@
+This directory have some Linux applications that help to test examples in the 
+$(RTL_LWIP_SOURCES)/examples directory.
+
+The names of the applications explain what they are by themselves (i.e. tcpClient
+is a tcp client that helps to test the tcpserver module).
+
+Before using them, you may change the IP addresses they are using, so change code 
+first.
+
+To compile any of the examples just type:
+>make name_of_the_example
+
+Example named prueba.c is intended to test both the udpserver.o module and the
+tcpserver.o module. Its code is simple, take a look at it.
+
+Once compiled, its use is:
+>./prueba <number_of_connections>
+
+This will connect number_of_connections times both with the tcpserver or the udpserver
+running in RT-Linux.
+
+
+Visit the RTL-lwIP web page:
+
+http://canals.disca.upv.es/~serpeal/RT-lwIP/htmlFiles/index.html

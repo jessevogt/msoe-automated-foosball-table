@@ -1,0 +1,21 @@
+#include "../README"
+
+This example features two real-time tasks that can potentially perform some
+real work, e.g. data collection. Here they simply write strings into FIFOs.
+
+The real-time part creates three RT-FIFOs: two for data passing, and one for
+control. Then it creates two real-time tasks and registers a handler with the
+control FIFO.
+
+Real-time and non-real-time parts both agree on the format of control messages
+(see file control.h). Whenever Linux tasks writes to the control FIFO, the
+handler is invoked. In the handler the RT-tasks are started and stopped.
+
+The real-time tasks are almost identical. They keep writing strings into FIFOs.
+In the end of each loop each of them makes a request to deschedule itself
+until the beginning of the next period.
+
+The Linux program (app) opens RT-FIFO devices, starts RT-tasks and enters the
+loop in which it reads and prints the data produced by RT-tasks.
+
+To run type `make; make test'

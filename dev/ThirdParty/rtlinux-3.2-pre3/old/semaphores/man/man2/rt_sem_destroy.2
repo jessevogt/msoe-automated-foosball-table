@@ -1,0 +1,57 @@
+.\"
+.\" Copyright (C) 1997 Jerry Epplin.  All rights reserved.
+.\"
+.\" Permission is granted to make and distribute verbatim copies of this
+.\" manual provided the copyright notice and this permission notice are
+.\" preserved on all copies.
+.\"
+.\" Permission is granted to copy and distribute modified versions of this
+.\" manual under the conditions for verbatim copying, provided that the
+.\" entire resulting derived work is distributed under the terms of a
+.\" permission notice identical to this one
+.\" 
+.\" The author assumes no responsibility for errors or omissions, or for
+.\" damages resulting from the use of the information contained herein.
+.\" 
+.\" Formatted or processed versions of this manual, if unaccompanied by
+.\" the source, must acknowledge the copyright and authors of this work.
+.\"
+.TH RT_SEM_DESTROY 2 "21 July 1997" "rt_ipc" "rt_ipc"
+.SH NAME
+rt_sem_destroy \- remove a semaphore
+.SH SYNOPSIS
+.nf
+.B #define MODULE
+.B #include <linux/module.h> 
+.B #include <linux/kernel.h> 
+.B #include <linux/version.h> 
+.B #include <linux/errno.h> 
+.B #include "rt_ipc.h"
+.fi
+.sp
+.BI "int rt_sem_destroy(rt_sem_t *" sem ");
+.SH DESCRIPTION
+.B rt_sem_destroy
+removes a semaphore previously created with
+.BR rt_sem_create .
+.I sem
+points to the structure used in the corresponding call to
+.BR rt_sem_create .
+Semaphore deletion safety is implemented; i.e., any tasks blocked on this 
+semaphore when it is destroyed are allowed to run.
+.SH "RETURN VALUE"
+On success, 0 is returned.  On failure, a negative value is returned
+as described below.
+.SH ERRORS
+.IP \fB-EINVAL\fP
+.I sem
+does not point to a valid rt_sem_t.
+.SH "AUTHOR"
+Jerry Epplin <JerryEpplin@worldnet.att.net>
+.SH "SEE ALSO"
+.BR rt_task_ipc_delete (2), 
+.BR rt_task_ipc_init (2), 
+.BR rt_sem_init (2), 
+.BR rt_sem_post (2), 
+.BR rt_sem_trywait (2), 
+.BR rt_sem_wait (2)

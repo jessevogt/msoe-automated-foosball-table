@@ -1,0 +1,32 @@
+INTRODUCTION
+This is an example of a tcpserver and client running both in RTLinux.
+
+CONFIGURATION
+Modify sources to assign correctly IP addresses.
+
+EXECUTION
+From the $(RTL_LWIP_SOURCES) directory run
+>make tcpserver || make tcpclient
+
+
+First you must have inserted the RTL-lwIP TCP/IP stack.
+Once done, do:
+>insmod tcpserver.o || insmod tcpclient.o
+
+
+In the $(RTL_LWIP_SOURCES)/unix are available some Linux apps to test tcpserver and 
+tcpclient modules.
+
+If you run in RT-Linux the tcpserver.o module, in the $(RTL_LWIP_SOURCES)/unix run
+>tcpClient <tcpserver_ip> <text>
+
+If you want to run in RT-Linux the tcpclient.o module, in the $(RTL_LWIP_SOURCES)/unix 
+previously you have to had run
+>tcpServer
+
+
+
+
+Visit the RTL-lwIP web page:
+
+http://canals.disca.upv.es/~serpeal/RTL-lwIP/htmlFiles/index.html

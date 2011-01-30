@@ -1,0 +1,19 @@
+
+This is an evolutionary version of RTLinux 3.2. There is little
+change from 3.1 but 3.2 is mainly there to gather new stuff.
+
+Added software:
+
+Unsupported: This directory contains contributed software that FSMLabs
+	has not tested. 
+
+	Rnet	by Robert Kovler
+		A package for allowing the RT system to use the sockets
+		api to connect to the Linux device driver.
+
+	Kernel patches for later Linux kernels.
+
+	rtlutil	a library of utilities for RTLinux from Yodaiken.
+
+
+

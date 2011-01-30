@@ -1,0 +1,9 @@
+
+Hello world using mbuff to communicate data from non-rt user-space to 
+a rt-thread
+
+hello_shm.o	kernel module accessing a shared data structure via mbuff
+
+user_shm	user-space app that writes to this shared data area, this
+		app will only write a string to the shared area an exit,
+		run dmesg to see if it arrived at the rt-thread.

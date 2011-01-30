@@ -1,0 +1,255 @@
+#!/bin/sh
+# RTLinux Configuration script file. 
+# Type:
+# 	rtl-config --help
+# for information on how to use this script file
+#
+# Copyright 2000, Finite State Machines Laboratory
+# Written by Edgar F. Hilton, efhilton@fsmlabs.com
+
+# file from which to derive our information
+MK_FILE=/usr/include/rtlinux/rtl.config
+
+# the rtl-config version
+VERSION=1.16
+
+# Help message
+usage ()
+{
+  echo
+  echo "USAGE: "
+  echo "	rtl-config [OPTIONS]"
+  echo ""
+  echo "General options:"
+  echo "        --config=<path> set the path+filename to the config file to parse"
+  echo "	--modules       returns the list of RTLinux modules"
+  echo "        --module_dir    returns the path to where the RTLinux modules reside"
+  echo "        --docs          returns path to the RTLinux docs"
+  echo "	--linux	        returns the path to the linux kernel source tree"
+  echo "	--prefix        returns the path to the rtlinux installation tree"
+  echo "	--arch          returns the architecture for the compiled RTLinux kernel"
+  echo "	--version       returns the rtl-config version"
+  echo "	--rtlVersion    returns the RTLinux kernel version"
+  echo "	--linuxVersion  returns the linux kernel version"
+  echo "	--cc	        returns the name for the compiler"
+  echo ""
+  echo "Compiling options for RT development:"
+  echo "	--rtinclude     paths to include files for RT programs"
+  echo "	--cflags        returns the necessary C flags to compile "
+  echo "	--cppflags      returns the necessary C++ flags to compile "
+  echo "        --mk            returns Makefile-compatible output (rtl.mk)"
+  echo ""
+  echo "Compiling options for non RT development:"
+  echo "	--include       returns paths to include files for nonRT programs"
+  echo "	--libs          returns libraries and paths"
+  echo ""
+  echo "Copyright 2000, Finite State Machine Labs, Inc."
+  echo "Questions? Contact Edgar F. Hilton, efhilton@fsmlabs.com"
+  echo
+}
+
+clean_list ()
+{
+    LIST=`echo $LIST | sed -e s/"\/\/"/"\/"/g `
+}
+
+rtl_parse_list ()
+{
+    if [ $LIST ]; then
+	clean_list
+	STRING=$SEPARATOR
+	TEMP_PARSE=`echo $LIST | \
+		    sed -e s/:/\ $SEPARATOR/g`
+	STRING=$STRING$TEMP_PARSE
+    else
+	STRING=""
+    fi
+}
+
+# check that enough arguments were passed
+if [ $# -eq 0 ]; then
+    usage 1 1 
+    exit 1;
+fi
+
+# Capture special options:
+# 1. configure the path to the parse file
+# 2. break out on special options
+MY_ARGS=""
+for args in $*; do
+    if [ `echo $args | grep -c -e '--config='` -gt 0 ] ; then
+	TEMP=`echo $@ | sed s/^.*--config\=// | sed s/\ .*$//`
+	if [ ! -z "$TEMP" ] ; then
+	    MK_FILE=$TEMP
+	fi
+    else
+        if [ `echo $args | grep -c -e '--mk'` -eq 1 ] || 
+           [ `echo $args | grep -c -e '--version'` -eq 1 ] || 
+           [ `echo $args | grep -c -e '--help'` -eq 1 ]; then
+	    MY_ARGS=$args
+	    break
+	else
+	    MY_ARGS="$MY_ARGS $args"
+	fi
+    fi
+done
+
+# check to make sure that the file exists
+if [ ! -f "$MK_FILE" ]; then
+    echo                                       
+    echo "ERROR:"
+    echo "  The parse file:"
+    echo "          $MK_FILE"
+    echo "  was not found."
+    echo 
+    echo "  Is RTLinux installed?"
+    echo
+    exit 1
+else
+. $MK_FILE
+fi
+
+# Our actual engine
+CALL_MYSELF_W="$0 --config=$MK_FILE"
+OUTPUT_STRING=""
+for ARGUMENT in $MY_ARGS; do
+    STRING=""
+    case "$ARGUMENT" in
+	--version)
+	    echo
+	    echo "RTL-CONFIG version: $VERSION"
+	    echo "   RTLINUX version: `$CALL_MYSELF_W --rtlVersion`"
+	    echo "     LINUX version: `$CALL_MYSELF_W --linuxVersion`"
+	    echo 
+	    echo " Copyright (C) 2000, Finite State Machine Labs, Inc."
+	    echo " Problems with script? Please contact:"
+            echo "     Edgar F. Hilton <efhilton@fsmlabs.com>"
+	    echo
+	    exit 0
+	    ;;
+	--mk)
+	    echo "# Generated automatically by rtl-config"
+	    echo "#   RTL-CONFIG version: $VERSION"
+	    echo "#      RTLINUX version: `$CALL_MYSELF_W --rtlVersion`"
+	    echo "#        LINUX version: `$CALL_MYSELF_W --linuxVersion`"
+	    echo "#"
+	    echo "# Copyright (C) 2000, Finite State Machine Labs, Inc."
+	    echo
+	    echo CC = `$CALL_MYSELF_W --cc`
+	    echo ARCH = `$CALL_MYSELF_W --arch`
+	    echo RTL_DIR = `$CALL_MYSELF_W --prefix`
+	    echo RTLINUX_DIR = `$CALL_MYSELF_W --linux`
+	    echo INCLUDE = `$CALL_MYSELF_W --rtinclude`
+	    echo CXXFLAGS = `$CALL_MYSELF_W --cppflags`
+	    echo CFLAGS = `$CALL_MYSELF_W --cflags`
+	    exit 0
+	    ;;
+	--help|-h)
+	    usage 1 1
+	    exit 0
+	    ;;
+	--docs)
+	    LIST=$DOC_DIRS
+	    SEPARATOR=""
+	    rtl_parse_list
+	    ;;
+	--module_dir)
+	    LIST=$MODULES_DIR
+	    SEPARATOR=""
+	    rtl_parse_list
+	    ;;
+	--modules)
+	    TMP_DIR=`pwd`
+	    LIST=$MODULES_DIR
+	    clean_list
+	    cd $LIST
+    	    for modules in *.o
+	    do
+		if [ ! $modules = "lib*.a" ]; then
+		    TEMP=`echo $modules | sed -e s/"\.o"$//`
+		    STRING="$STRING $TEMP"
+		fi
+	    done
+	    cd $TMP_DIR
+	    ;;
+	--linux)
+	    LIST=$RTLINUX_DIR
+	    clean_list
+	    STRING=$LIST
+	    ;;	
+	--prefix)
+	    LIST=$RTL_DIR
+	    clean_list
+	    STRING=$LIST
+	    ;;
+	--arch)
+	    STRING=$ARCH
+	    ;;
+	--cc)
+	    STRING=$CC
+	    ;;
+	--cflags)
+	    STRING="$CFLAGS"
+	    ;;
+	--cppflags)
+	    STRING="$CXXFLAGS"
+	    ;;
+	--rtinclude)
+	    LIST=$INCLUDE_DIR
+	    SEPARATOR="-I"
+	    rtl_parse_list
+	    ;;
+	--include)
+	    LIST=$USER_INC_DIR
+	    SEPARATOR="-I"
+	    rtl_parse_list
+	    ;;
+	--libs)
+	    TMP_DIR=`pwd`
+	    LIST=$LIBS_DIR         
+	    SEPARATOR="-L"
+	    rtl_parse_list      # parse list of directories, append -L's
+	    # find all libraries within these directories
+	    for libdirs in $STRING
+	    do
+		TEMP_LIBS_DIR=`echo $libdirs | sed -e s/^-L//`
+		cd $TEMP_LIBS_DIR
+		for libs in lib*.a
+		do
+		    if [ ! $libs = "lib*.a" ]; then
+			TEMP=`echo $libs | sed -e s/^lib/-l/ -e s/"\.a"//`
+			STRING="$STRING $TEMP"
+		    fi
+		done
+	    done
+	    cd $TMP_DIR
+	    ;;
+	--rtlVersion)
+	    STRING="$RTL_VERSION_MAJOR.$RTL_VERSION_MINOR"
+	    if [ $RTL_VERSION_EXTRA ]; then
+	       STRING="$STRING-$RTL_VERSION_EXTRA"
+	    fi
+	    ;;
+	--linuxVersion)
+	    STRING="$LINUX_VERSION.$LINUX_PATCHLEVEL.$LINUX_SUBLEVEL"
+	    if [ $LINUX_EXTRAVERSION ]; then
+	       STRING="$STRING-$LINUX_EXTRAVERSION"
+	    fi
+	    ;;
+	*)
+	    usage 1 1
+	    exit 1
+	    ;;
+    esac
+    OUTPUT_STRING="$OUTPUT_STRING $STRING"
+done
+
+# Print  our necessary information
+echo $OUTPUT_STRING
+
+# Exit gracefully
+exit 0
+
+
+
+

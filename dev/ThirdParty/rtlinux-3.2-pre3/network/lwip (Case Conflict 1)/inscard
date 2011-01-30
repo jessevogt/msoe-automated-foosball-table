@@ -1,0 +1,2 @@
+insmod rt_3c905x_phys.o
+ifdown eth0

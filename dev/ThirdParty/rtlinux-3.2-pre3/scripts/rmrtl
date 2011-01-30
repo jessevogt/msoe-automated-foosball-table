@@ -1,0 +1,18 @@
+#!/bin/sh
+if lsmod | grep -q rtl_debug; then
+	rmmod rtl_debug 
+fi
+if lsmod | grep -q psc; then
+	rmmod psc
+fi
+if lsmod | grep -q rtl_mqueue; then
+	rmmod rtl_mqueue
+fi
+rmmod rtl_sched
+rmmod rtl_fifo
+if lsmod | grep -q rtl_posixio; then
+	rmmod rtl_posixio
+fi
+rmmod rtl_time
+rmmod rtl
+exit 0

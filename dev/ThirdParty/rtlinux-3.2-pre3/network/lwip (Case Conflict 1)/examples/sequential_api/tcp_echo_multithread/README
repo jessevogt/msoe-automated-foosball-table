@@ -1,0 +1,26 @@
+INTRODUCTION
+This is an example of a tcpserver running in RTLinux.
+In this case, tcpserver creates a thread for each incoming connection, so many tcpclients
+can be inserted at once.
+
+CONFIGURATION
+Modify sources to assign correctly IP addresses.
+
+EXECUTION
+From the $(RTL_LWIP_SOURCES) directory run
+>make tcpthreaded 
+
+
+First you must have inserted the RTL-lwIP TCP/IP stack.
+Once done, do:
+>insmod tcpthreaded.o
+
+
+In the $(RTL_LWIP_SOURCES)/unix are available some Linux apps to test tcpserver module.
+
+If you run in RT-Linux the tcpthreaded.o module, in the $(RTL_LWIP_SOURCES)/unix run multiple
+>tcpClient <tcpserver_ip> <text>
+
+Visit the RTL-lwIP web page:
+
+http://canals.disca.upv.es/~serpeal/RTL-lwIP/htmlFiles/index.html
